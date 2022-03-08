@@ -37,8 +37,6 @@
 #include "nvs_flash.h"
 #include "L298N.h"
 
-#define TEMP_SENSE_IO 4
-
 #define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
 #define NO_OF_SAMPLES 1
 
