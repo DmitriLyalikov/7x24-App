@@ -1,13 +1,24 @@
-7x24-App
-# ULP SHT3x sensor application
 
-This software captures temerature and humidity and send those value to
-Fluentd.
+# 7x24 ESP32 Application Code
 
-By using low power ULP, it can powered by AAA batteries.
+This application controls heating element temperature with a PID control
 
-# Pin assign
-* GPIO25: SCL
-* GPIO33: SDA
-* GPIO14: TPS61291 Bypass (if battery voltage is high enough, output L)
-* GPIO32: Battery voltage monitor (A/D)
+# Author
+Dmitri Lyalikov
+
+# Hardware Components
+ESP32-DevKitC-V4
+L298N DC-DC Motor Driver
+LM35 Analog Temperature Sensor
+
+# ESP32 Pin Topology
+*     -GPIO34 <-> LM35 Vout
+*     -GPIO32 <-> L298N IN1_0
+*     -GPIO33 <-> L298N IN2_0
+*     -GPIO25 <-> L298N EN1_0
+*     -GPIO27 <-> L298N IN1_1
+*     -GPIO14 <-> L298N IN2_1
+*     -GPIO12 <-> L298N EN1_1
+
+# Components
+esp_demo.c 
