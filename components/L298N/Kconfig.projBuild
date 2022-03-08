@@ -1,0 +1,30 @@
+menu "L298N Configuration"
+    config SERVO0_IN1_GPIO
+        int "Servo GPIO 1"
+        range 0 34
+        default 32
+        help 
+            GPIO number (IOxx)
+    config SERVO0_IN2_GPIO
+        int "Servo GPIO 2"
+        range 0 34
+        default 33
+    config SERVO0_ENABLE_GPIO
+        int "Servo Enable GPIO"
+        range 0 34
+        default 25
+    config SERVO1_IN1_GPIO
+        int "Servo GPIO 1"
+        range 0 34
+        default 27
+        help 
+            GPIO number (IOxx)
+    config SERVO1_IN2_GPIO
+        int "Servo GPIO 2"
+        range 0 34
+        default 14
+    config SERVO1_ENABLE_GPIO
+        int "Servo Enable GPIO"
+        range 0 34
+        default 12 
+endmenu
