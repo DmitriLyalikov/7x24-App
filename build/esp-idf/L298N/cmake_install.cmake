@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/components/L298N
+# Install script for directory: C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/components/L298N
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
