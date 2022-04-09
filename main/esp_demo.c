@@ -15,16 +15,17 @@
  *     -GPIO14 <-> L298N IN2_1
  *     -GPIO12 <-> L298N EN1_1
  */
-
-#include "esp_system.h"
-#include "esp_spi_flash.h"
 #include <stdio.h>
 #include <sys/param.h>
 #include <stdbool.h>
+
+#include "esp_system.h"
+#include "esp_spi_flash.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include "freertos/timers.h"
+#include "freertos/event_groups.h"
 #include "freertos/semphr.h"
 #include "esp_log.h"
 #include "esp_err.h"
@@ -40,7 +41,18 @@
 #include "esp_wifi.h"
 #include <esp_event.h>
 #include <esp_event_loop.h>
-#include <tcpip_adapter.h>
+
+#include "certs.h"
+#include "aws_iot_config.h"
+#include "aws_iot_log.h"
+#include "aws_iot_version.h"
+#include "aws_iot_mqtt_client_interface.h"
+
+#define WIFI_SSID "WIFI SSID"
+#define WIFI_PASS "Wifi Password"
+
+static EventGrouphandle_t wifi_event_group;
+const int CONNECTED_BIT = BIT0;
 
 #define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
 #define NO_OF_SAMPLES 1
@@ -103,30 +115,182 @@ static void vReadQueue(xSense_t *pxData)
     xQueuePeek(xSense_Queue, pxData, portMAX_DELAY);
 }
 
-esp_err_t event_handler(void *ctx, system_event_t *event)
+void disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data)
 {
-    if (event->event_id == SYSTEM_EVENT_GOT_IP){
-        printf("Got IP Address: " IPSTR "\n",
-        iP2STR(&event->event_info.got_ip.ip_info.ip));
+    IOT_WARN("MQTT Disconnect");
+    IoT_Error_t rc = FAILURE;
+  
+    if(pCLient == NULL){
+	return;
     }
-    if (event->event_id == SYSTEM_EVENT_STA_START) {
-        ESP_ERROR_CHECK(esp_wifi_connect());
+    
+    IOT_UNUSED(data);
+  
+    if(aws_iot_is_autoreconnect_enabled(pClient){
+	IOT_INFO("Auto Reconnect is enabled, reconnecting attempt will start now");
     }
-    return ESP_OK;
+    else {
+	IOT_WARN("Auto reconnect not enabled, Starting manual reconnect...");
+    	rc = aws_iot_mqtt_attempt_reconnect(pClient);
+	if(NETWORK_RECONNECTED ==rc) {
+	    IOT_WARN("Manual reconnect successful");
+	}
+	else {
+	    IOT_WARN("Manual reconnect failed - %d", rc);
+	}
+    }
 }
 
-static void vInitWifi(void)
+
+static esp_err_t event_handler(void *ctx, system_event_t *event)
 {
-    s_app_event_group = xEventGroupCreate();
+    switch(event->event_id){
+	case SYSTEM_EVENT_STA_START:
+	    esp_wifi_connect();
+	    break;
+   	case SYSTEM_EVENT_STA_GOT_IP:
+	    xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
+	    break;
+  	case SYSTEM_EVENT_STA_DISCONNECTED:
+	    esp_wifi_connect();
+	    xEventGroupClearBits(wifi_event_group, CONNECTED_BIT);
+	    break;
+	default:
+	    break;
+      }
+	return ESP_OK;
+}
+
+static void initialise_wifi(void)
+{
     tcpip_adapter_init();
-
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
-
+    wifi_event_group = xEventGroupCreate();
+    ESP_ERROR_CHECK( esp_event_loop_init(event_handler, NULL));
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+    ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
+    wifi_config_t wifi_config = {
+	.sta = {
+	    .ssid = WIFI_SSID,
+  	    .password = WIFI_PASS,
+	},
+    };
+    fprintf(stderr, "Setting Wifi Configuration SSID %s...\n", wifi_config.sta.ssid);
+    ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_STA));
+    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
+    ESP_ERROR_CHECK( esp_wifi_start());
+}
 
+static void record_temp_task(void *pvParameters)
+{
+    xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT, false, true, portMAX_DELAY);
+    fprintf(stderr, "Connected to AP\n");
 
+    IoT_Client_Init_Params mqttInitParams = iotClientInitParamsdefault;
 
+    IOT_INFO("\nAWS IoT SDK Version %d.%d.%d-%d \n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH, VERSION_TAG);
+    
+    mqttInitParams.enableAutoReconnect = false; // Enable this later
+    mqttInitParams.pHostURL = AWS_IOT_MQTT_HOST;
+    mqttInitParms.port = AWS_IOT_MQTT_PORT;
+    mqttInitParams.pRootCALocation = "";
+    mqttInitParams.pDeviceCertLocation = "";
+    mqttInitParams.pDevicePrivateKeyLocation = "";
+    mqttInitParams.mqttCommandTimeout_ms = 20000;
+    mqttInitParams.tlsHandshakeTimeout_ms = 20000;
+    mqttInitParams.isSSLHostnameVerify = true;
+    mqttInitParams.disconnectHandler = disconnectCallbackHandler;
+    mqttInitParams.disconnectedHandlerData = NULL;
+   
+    IoT_Error_t rc = FAILURE;
+    AWS_IoT_Client client;
+    rc = aws_iot_mqtt_init(&client &mqttInitParams);
+    if(SUCCESS != rc) {
+	IOT_ERROR("aws_iot_mqtt_init returned error : %d ", rc);
+      abort();
+    }
+  
+    IoT_Client_Connect_Params = connectParams = iotClientConnectParamsDefault;
+    connectParams.keepAliveIntervalInSec = 10;
+    connectParams.isCleanSession = true;
+    connectParams.MQTTVersion = MQTT_3_1_1;
+    connectParams.pClientID = AWS_IOT_MQTT_CLIENT_ID;
+    connectParams.clientIDLen = (uint16_t)strlen(AWS_IOT_MQTT_CLIENT_ID);
+    connectParams.isWillMsgPresent = false;
+
+    IOT_INFO("Connecting...");
+    rc = aws_iot_mqtt_connect(&client, &connectParams);
+    if(SUCCESS != rc){
+        IOT_ERROR("(%d) connecting to %s:%d", rc, mqttInitParams.pHostURL, mqttInitParams.port);
+        abort();
+    }
+    
+    rc = aws_iot_mqtt_autoreconnect_set_status(&client, true);
+    if(SUCCESS != rc) {
+	IOT_ERROR("Unable to set Auto Reconnect to true - %d", rc);
+      abort();
+    }
+    
+    const char *topicName = "sdkTest/sub";
+   
+    char cPayload[100];
+    uint32_t payloadCount = 0;
+    sprintf(cPayload, "%s : %d ", " hello from SDK", payloadCount);
+    
+    IoT_Publish_Message_Params paramsQOS0;
+    paramsQOS0.qos = QOS0;
+    paramsQOS0.payload = (void *) cPayload;
+    paramsQOS0.isRetained = 0;
+
+    Timer sendit;
+    countdown_ms(&sendit, 1500);
+    
+    uint32_t reconnectAttempts = 0;
+    uint32_t reconnectedCount = 0;
+  
+    while((NETWORK_ATTEMPTING_RECONNECT == rc || NETWORK_RECONNECTED == rc || SUCCESS == rc )) {
+        IOT_DEBUG("Top of loop: payloadCount=%d, reconnectAttempt=%d, reconnectedCount=%d\n", payloadCount, reconnectAttempts, reconnectedCount);
+
+	  // Max time the yield functioin will wait for messages
+        rc = aws_iot_mqtt_yield(&client, 1000);
+  	  if(NETWORK_ATTEMPTING_RECONNECT == rc) {
+	    reconnectAttempts++;
+	    IOT_DEBUG("Reconnecting...\n");
+          // if the client is attempting to reconnect we will skip the rest of the loop
+	    continue;
+         }
+ 
+   	if(NETWORK_RECONNECTED == rc) {
+          reconnectedCount++;
+	    IOT_DEBUG(stderr, "Reconnected...\n");
+      }
+    
+      if(!has_timer_expired(&sendit)) {
+	    IOT_INFO("--> sleeping it off");
+	    vTaskDelay(1000/ portTICK_PERIOD_MS);
+   	    continue;
+      }
+  
+      sprintf(cPayload, "%s : %d ", "hello from SDK QOS0", payloadCount++);
+      params.QOS0.payloadLen = strlen(cPayload);
+      rc = aws_iot_mqtt_publish(&client, topicName, strlen(topicName), &paramsQOS0);
+      if (rc == MQTT_REQUEST_TIMEOUT_ERROR) {
+	    IOT_DEBUG("QOS0 publish ack not received.\n");
+	    rc = SUCCESS;
+	}
+    
+    if(SUCCESS != rc ) {
+	IOT_ERROR("An error occurred in the loop.\n");
+     }
+    else {
+	IOT_INFO("Publish Done\n");
+    }
+   
+    countdown_ms(&sendit, 15000);
+    }
+ 
+    IOT_ERROR("Escaped loop...\n");
+    abort();
 }
 
 /**
