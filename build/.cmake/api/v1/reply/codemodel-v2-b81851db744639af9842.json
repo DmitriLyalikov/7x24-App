@@ -1614,7 +1614,7 @@
 				{
 					"directoryIndex" : 9,
 					"id" : "__idf_app_update::@cc3b426666063acc9674",
-					"jsonFile" : "target-__idf_app_update-bb65ad1c17cc13ee25da.json",
+					"jsonFile" : "target-__idf_app_update-cd6860af3288555997bb.json",
 					"name" : "__idf_app_update",
 					"projectIndex" : 1
 				},
@@ -1775,7 +1775,7 @@
 				{
 					"directoryIndex" : 68,
 					"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef",
-					"jsonFile" : "target-__idf_esp_local_ctrl-3a135efb205fd0b564d0.json",
+					"jsonFile" : "target-__idf_esp_local_ctrl-cb8b698ba10e5f62163c.json",
 					"name" : "__idf_esp_local_ctrl",
 					"projectIndex" : 1
 				},
@@ -1929,7 +1929,7 @@
 				{
 					"directoryIndex" : 88,
 					"id" : "__idf_main::@7368607ed66887415643",
-					"jsonFile" : "target-__idf_main-b17d969afaa9e020cc39.json",
+					"jsonFile" : "target-__idf_main-56fca96d7ecb95e6dfa2.json",
 					"name" : "__idf_main",
 					"projectIndex" : 1
 				},
@@ -2083,7 +2083,7 @@
 				{
 					"directoryIndex" : 86,
 					"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098",
-					"jsonFile" : "target-__idf_wifi_provisioning-73737c45e47aef628ce8.json",
+					"jsonFile" : "target-__idf_wifi_provisioning-a540cd2b2da48395c23d.json",
 					"name" : "__idf_wifi_provisioning",
 					"projectIndex" : 1
 				},
@@ -2104,7 +2104,7 @@
 				{
 					"directoryIndex" : 40,
 					"id" : "__ldgen_output_esp32.project.ld::@c361781f7cb51efad0ea",
-					"jsonFile" : "target-__ldgen_output_esp32.project.ld-542908918aa5cd8c6d88.json",
+					"jsonFile" : "target-__ldgen_output_esp32.project.ld-27134ea6dc5af923e2f2.json",
 					"name" : "__ldgen_output_esp32.project.ld",
 					"projectIndex" : 1
 				},
@@ -2230,14 +2230,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "esp_demo.elf::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-esp_demo.elf-d14efbc9722216df4439.json",
+					"jsonFile" : "target-esp_demo.elf-8a763e00636cc65356c8.json",
 					"name" : "esp_demo.elf",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "flash::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-flash-a4281d446c90cb8c2cc7.json",
+					"jsonFile" : "target-flash-2298f71453bf54213f55.json",
 					"name" : "flash",
 					"projectIndex" : 0
 				},
@@ -2342,7 +2342,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "uf2::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-uf2-fb8fd35f193e0ca89ab4.json",
+					"jsonFile" : "target-uf2-ce0eda29cce0ba1f0237.json",
 					"name" : "uf2",
 					"projectIndex" : 0
 				},

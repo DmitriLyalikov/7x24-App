@@ -41,21 +41,21 @@
 #include "esp_adc_cal.h"
 #include "esp_wifi.h"
 #include <esp_event.h>
-#include <esp_event_loop.h>
+#include <esp_event.h>  // deprecated used esp_event.h
 
-#include "certs.h"
-#include "aws_iot_config.h"
-#include "aws_iot_log.h"
-#include "aws_iot_version.h"
-#include "aws_iot_mqtt_client_interface.h"
+// #include "certs.h"
+//#include "aws_iot_config.h"
+//#include "aws_iot_log.h"
+//#include "aws_iot_version.h"
+//#include "aws_iot_mqtt_client_interface.h"
 
 #define WIFI_SSID "WIFI SSID"
 #define WIFI_PASS "Wifi Password"
 
-static EventGrouphandle_t wifi_event_group;
+//static EventGrouphandle_t wifi_event_group; (Error unknown type)
 const int CONNECTED_BIT = BIT0;
 
-#define FLOW_RATE_PIN = GPIO_NUM_21
+#define FLOW_RATE_PIN  GPIO_NUM_21
 volatile uint16_t flow_samples;
 
 #define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
@@ -95,12 +95,12 @@ QueueHandle_t xSense_Queue, xFlow_Queue;
 /**
  * @brief Initialize Temperature and Flow Rate Sense Mailbox Queue
  */
-xSense_t vQueueInit(void)
+QueueHandle_t vQueueInit(void)
 {   
     return xQueueCreate(1, sizeof(xSense_t));
 }
 
-void vUpdateQueue(xSense_t *Queue, float ulNewValue)
+void vUpdateQueue(QueueHandle_t Queue, float ulNewValue)
 {
     xSense_t xData;
     xData.ulValue = ulNewValue;
@@ -116,9 +116,14 @@ void vUpdateQueue(xSense_t *Queue, float ulNewValue)
  * @param pxData Pointer to Struct of type xSense_t for contents to be copied
  * @param Queue  Pointer to struct of type xSense_T to be read from
  */
-static void vReadQueue(xSense_t *pxData, xSense_t *Queue)
+static void vReadQueue(xSense_t *pxData, QueueHandle_t Queue)
 {
     xQueuePeek(Queue, pxData, portMAX_DELAY);
+}
+
+void vFlowInterrupt_Handler(void *pvParameter)
+{
+    flow_samples++;
 }
 
 /**
@@ -144,25 +149,21 @@ void vInit_Flow(void)
  *        Writes to xFlow_Queue every 60 seconds
  * Flow_Rate = (Pulse Frequency x 60) / 38 (Flow Rate in liters per hour)
  */
-void vFlow_Rate_Task(void)
+static void vFlow_Rate_Task(void *pvParameter)
 {
     uint32_t flow_rate = 0;
     for (;;)
     {
-    flow_samples = 0
+    flow_samples = 0;
     vTaskDelay(pdMS_TO_TICKS(60000));
     flow_rate = (flow_samples / 38 * 60); 
     vUpdateQueue(xFlow_Queue, flow_rate);
+    printf("Flow Rate = %d\n", flow_rate);
     vTaskDelay(pdMS_TO_TICKS(10000));
     }
-    
 }
 
-static void vFlowInterrupt_Handler(void)
-{
-    flow_samples++;
-}
-
+/*
 void disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data)
 {
     IOT_WARN("MQTT Disconnect");
@@ -340,7 +341,7 @@ static void record_temp_task(void *pvParameters)
     IOT_ERROR("Escaped loop...\n");
     abort();
 }
-
+*/
 /**
 *@brief
 *  Config ADC (GPIO 34)
@@ -468,7 +469,7 @@ void app_main(void)
                             0,
                             NULL,
                             0); 
-    xTaskCreatePinnedToCore(&vFlow_Rate_Task,
+    xTaskCreatePinnedToCore(vFlow_Rate_Task,
                             "FLOW_SENSE",
                             600,
                             NULL,

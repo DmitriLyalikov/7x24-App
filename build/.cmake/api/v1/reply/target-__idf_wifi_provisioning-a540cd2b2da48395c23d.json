@@ -513,15 +513,15 @@
 		},
 		{
 			"backtrace" : 5,
+			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
+		},
+		{
+			"backtrace" : 5,
 			"id" : "__idf_protobuf-c::@b14513c4bd859268ec22"
 		},
 		{
 			"backtrace" : 7,
 			"id" : "__idf_mdns::@2f076c6da9dadb273cdc"
-		},
-		{
-			"backtrace" : 5,
-			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
 		},
 		{
 			"backtrace" : 8,
