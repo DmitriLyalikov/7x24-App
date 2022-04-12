@@ -45,7 +45,6 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
-
 // #include "certs.h"
 //#include "aws_iot_config.h"
 //#include "aws_iot_log.h"
@@ -60,7 +59,6 @@
 #define WIFI_FAIL_BIT      BIT1
 
 #define FLOW_RATE_PIN  GPIO_NUM_21
-static volatile uint16_t flow_samples;
 
 #define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
 #define NO_OF_SAMPLES 1
@@ -76,14 +74,13 @@ static volatile float sum = 0;
 static volatile float old_error = 0;
 
 static float set_temp = 20;      // Desired Temperature of Target (Celsius)
-
+static volatile uint16_t flow_samples;
 
 static esp_adc_cal_characteristics_t *adc_chars;
 static const adc_channel_t channel = ADC_CHANNEL_6;   // GPIO34 
 static const adc_bits_width_t width = ADC_WIDTH_12Bit;
 static const adc_atten_t atten = ADC_ATTEN_DB_11;
 static const adc_unit_t unit = ADC_UNIT_1;
-
 
 static SemaphoreHandle_t xQueueMutex;
 static EventGroupHandle_t s_wifi_event_group;
@@ -97,11 +94,10 @@ typedef struct xSense_t
 
 QueueHandle_t xSense_Queue, xFlow_Queue, xgpio_evt;
 
-
 /**
  * @brief Initialize Temperature and Flow Rate Sense Mailbox Queue
  */
-QueueHandle_t vQueueInit(void)
+static QueueHandle_t vQueueInit(void)
 {   
     return xQueueCreate(1, sizeof(xSense_t));
 }
@@ -171,12 +167,7 @@ void vInit_Flow(void)
                             2,
                             NULL,
                             1); 
-
-    //gpio_install_isr_service(0);
-    //gpio_isr_handler_add(FLOW_RATE_PIN, vFlowInterrupt_Handler, NULL);
-    //install gpio isr service
     gpio_install_isr_service(0);
-    //hook isr handler for specific gpio pin
     gpio_isr_handler_add(FLOW_RATE_PIN, vFlow_ISR_Handler, (void*) FLOW_RATE_PIN);
 }
 
@@ -402,6 +393,7 @@ static void record_temp_task(void *pvParameters)
     abort();
 }
 */
+
 /**
 *@brief
 *  Config ADC (GPIO 34)
