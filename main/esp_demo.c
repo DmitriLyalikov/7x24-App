@@ -41,7 +41,7 @@
 #include "esp_adc_cal.h"
 #include "esp_wifi.h"
 #include <esp_event.h>
-#include <esp_event.h>  // deprecated used esp_event.h
+#include <esp_event.h> 
 
 // #include "certs.h"
 //#include "aws_iot_config.h"
