@@ -41,7 +41,10 @@
 #include "esp_adc_cal.h"
 #include "esp_wifi.h"
 #include <esp_event.h>
-#include <esp_event.h> 
+
+#include "lwip/err.h"
+#include "lwip/sys.h"
+
 
 // #include "certs.h"
 //#include "aws_iot_config.h"
@@ -51,9 +54,10 @@
 
 #define WIFI_SSID "WIFI SSID"
 #define WIFI_PASS "Wifi Password"
+#define ESP_MAXIMUM_RETRY 5
 
-//static EventGrouphandle_t wifi_event_group; (Error unknown type)
-const int CONNECTED_BIT = BIT0;
+#define WIFI_CONNECTED_BIT BIT0
+#define WIFI_FAIL_BIT      BIT1
 
 #define FLOW_RATE_PIN  GPIO_NUM_21
 volatile uint16_t flow_samples;
@@ -82,6 +86,8 @@ static const adc_unit_t unit = ADC_UNIT_1;
 
 
 static SemaphoreHandle_t xQueueMutex;
+static EventGroupHandle_t s_wifi_event_group;
+static int s_retry_num = 0;
 
 typedef struct xSense_t
 {
@@ -190,46 +196,89 @@ void disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data)
     }
 }
 
-
-static esp_err_t event_handler(void *ctx, system_event_t *event)
+*/
+static void event_handler(void* arg, esp_event_base_t event_base,
+                                int32_t event_id, void* event_data)
 {
-    switch(event->event_id){
-	case SYSTEM_EVENT_STA_START:
-	    esp_wifi_connect();
-	    break;
-   	case SYSTEM_EVENT_STA_GOT_IP:
-	    xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
-	    break;
-  	case SYSTEM_EVENT_STA_DISCONNECTED:
-	    esp_wifi_connect();
-	    xEventGroupClearBits(wifi_event_group, CONNECTED_BIT);
-	    break;
-	default:
-	    break;
-      }
-	return ESP_OK;
+    if(event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START){
+        esp_wifi_connect();
+        printf("Connecting to WIFI\n");
+    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
+        if (s_retry_num < ESP_MAXIMUM_RETRY) {
+            esp_wifi_connect();
+            s_retry_num++;
+        } else {
+            xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
+        } 
+    }  else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
+        ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
+        printf("got ip:" IPSTR, IP2STR(&event->ip_info.ip));
+        s_retry_num = 0;
+        xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
+    }
 }
 
 static void initialise_wifi(void)
 {
-    tcpip_adapter_init();
-    wifi_event_group = xEventGroupCreate();
-    ESP_ERROR_CHECK( esp_event_loop_init(event_handler, NULL));
+    s_wifi_event_group = xEventGroupCreate();
+
+    ESP_ERROR_CHECK(esp_netif_init());
+
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
+    esp_netif_create_default_wifi_sta();
+
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
-    ESP_ERROR_CHECK(esp_wifi_set_storage(WIFI_STORAGE_RAM));
-    wifi_config_t wifi_config = {
-	.sta = {
-	    .ssid = WIFI_SSID,
-  	    .password = WIFI_PASS,
-	},
-    };
-    fprintf(stderr, "Setting Wifi Configuration SSID %s...\n", wifi_config.sta.ssid);
-    ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_STA));
-    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
-    ESP_ERROR_CHECK( esp_wifi_start());
-}
 
+    esp_event_handler_instance_t instance_any_id;
+    esp_event_handler_instance_t instance_got_ip;
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
+                                                ESP_EVENT_ANY_ID,
+                                                &event_handler,
+                                                NULL,
+                                                &instance_any_id));
+    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
+                                                        IP_EVENT_STA_GOT_IP,
+                                                        &event_handler,
+                                                        NULL,
+                                                        &instance_got_ip));
+    wifi_config_t wifi_config = {
+        .sta = {
+            .ssid = WIFI_SSID,
+            .password = WIFI_PASS,
+        },
+    };
+    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
+    ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
+    ESP_ERROR_CHECK(esp_wifi_start());
+    fprintf(stderr, "Setting Wifi Configuration SSID %s...\n", wifi_config.sta.ssid);
+
+    /* Waiting until either the connection is established (WIFI_CONNECTED_BIT) or connection failed for the maximum
+     * number of re-tries (WIFI_FAIL_BIT). The bits are set by event_handler() (see above) */
+    EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
+            WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
+            pdFALSE,
+            pdFALSE,
+            portMAX_DELAY);
+
+    /* xEventGroupWaitBits() returns the bits before the call returned, hence we can test which event actually
+     * happened. */
+    if (bits & WIFI_CONNECTED_BIT) {
+        printf("connected to ap SSID:%s password:%s\n",
+                 WIFI_SSID, WIFI_PASS);
+    } else if (bits & WIFI_FAIL_BIT) {
+        printf("Failed to connect to SSID:%s, password:%s\n",
+                 WIFI_SSID, WIFI_PASS);
+    } else {
+        printf("UNEXPECTED EVENT\n");
+    }
+
+    /* The event will not be processed after unregister */
+    ESP_ERROR_CHECK(esp_event_handler_instance_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, instance_got_ip));
+    ESP_ERROR_CHECK(esp_event_handler_instance_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, instance_any_id));
+    vEventGroupDelete(s_wifi_event_group);
+}
+/**
 static void record_temp_task(void *pvParameters)
 {
     xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT, false, true, portMAX_DELAY);
@@ -454,6 +503,7 @@ void app_main(void)
     xSense_Queue = vQueueInit();
     xFlow_Queue = vQueueInit();
     vInit_Flow();
+    initialise_wifi();
 
     xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",

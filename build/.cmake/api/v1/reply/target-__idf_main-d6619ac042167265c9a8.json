@@ -622,19 +622,7 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_cbor::@54bec30243cbf65f6214"
-		},
-		{
-			"backtrace" : 0,
 			"id" : "__idf_asio::@db1a8833e22596808d70"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_console::@4311ed8d271cc0ee1422"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_cmock::@38f9eb59693b7394f54c"
 		},
 		{
 			"backtrace" : 0,
@@ -643,6 +631,18 @@
 		{
 			"backtrace" : 0,
 			"id" : "__idf_coap::@9ea4196552bc90428972"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_cmock::@38f9eb59693b7394f54c"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_cbor::@54bec30243cbf65f6214"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_console::@4311ed8d271cc0ee1422"
 		},
 		{
 			"backtrace" : 0,
@@ -658,11 +658,11 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_protobuf-c::@b14513c4bd859268ec22"
+			"id" : "__idf_mdns::@2f076c6da9dadb273cdc"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_mdns::@2f076c6da9dadb273cdc"
+			"id" : "__idf_protobuf-c::@b14513c4bd859268ec22"
 		},
 		{
 			"backtrace" : 0,
@@ -690,27 +690,7 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_jsmn::@88dec008f06e3af609d0"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_spiffs::@df881b71474064c86689"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_openssl::@e614527ea5fe5ca5f395"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_libsodium::@66e4f5d448f23c9449a2"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_json::@c78a8bdc820334f01148"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_mqtt::@c1ab2c6a99226d1f4b56"
+			"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098"
 		},
 		{
 			"backtrace" : 0,
@@ -718,7 +698,27 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098"
+			"id" : "__idf_json::@c78a8bdc820334f01148"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_jsmn::@88dec008f06e3af609d0"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_libsodium::@66e4f5d448f23c9449a2"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_openssl::@e614527ea5fe5ca5f395"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_mqtt::@c1ab2c6a99226d1f4b56"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_spiffs::@df881b71474064c86689"
 		}
 	],
 	"id" : "__idf_main::@7368607ed66887415643",
