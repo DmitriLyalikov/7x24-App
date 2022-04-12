@@ -1614,7 +1614,7 @@
 				{
 					"directoryIndex" : 9,
 					"id" : "__idf_app_update::@cc3b426666063acc9674",
-					"jsonFile" : "target-__idf_app_update-b5963adc3988126c99e4.json",
+					"jsonFile" : "target-__idf_app_update-bb65ad1c17cc13ee25da.json",
 					"name" : "__idf_app_update",
 					"projectIndex" : 1
 				},
@@ -1929,7 +1929,7 @@
 				{
 					"directoryIndex" : 88,
 					"id" : "__idf_main::@7368607ed66887415643",
-					"jsonFile" : "target-__idf_main-2bca9a0b071c0f8e3e51.json",
+					"jsonFile" : "target-__idf_main-b17d969afaa9e020cc39.json",
 					"name" : "__idf_main",
 					"projectIndex" : 1
 				},
@@ -2104,7 +2104,7 @@
 				{
 					"directoryIndex" : 40,
 					"id" : "__ldgen_output_esp32.project.ld::@c361781f7cb51efad0ea",
-					"jsonFile" : "target-__ldgen_output_esp32.project.ld-5850b71ae7c7bb47ff3d.json",
+					"jsonFile" : "target-__ldgen_output_esp32.project.ld-542908918aa5cd8c6d88.json",
 					"name" : "__ldgen_output_esp32.project.ld",
 					"projectIndex" : 1
 				},
@@ -2230,14 +2230,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "esp_demo.elf::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-esp_demo.elf-263d1b628741ebdf8cf6.json",
+					"jsonFile" : "target-esp_demo.elf-d14efbc9722216df4439.json",
 					"name" : "esp_demo.elf",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "flash::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-flash-2298f71453bf54213f55.json",
+					"jsonFile" : "target-flash-a4281d446c90cb8c2cc7.json",
 					"name" : "flash",
 					"projectIndex" : 0
 				},

@@ -2,30 +2,6 @@
 	"entries" : 
 	[
 		{
-			"name" : "CCACHE_ENABLE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : "1"
-		},
-		{
-			"name" : "CCACHE_FOUND",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Path to a program."
-				}
-			],
-			"type" : "FILEPATH",
-			"value" : "C:/Users/Dmitr/.espressif/tools/ccache/3.7/ccache.exe"
-		},
-		{
 			"name" : "CMAKE_ADDR2LINE",
 			"properties" : 
 			[
@@ -303,11 +279,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "(This variable does not exist and should not be used)"
+					"value" : "CXX compiler"
 				}
 			],
-			"type" : "UNINITIALIZED",
-			"value" : ""
+			"type" : "STRING",
+			"value" : "C:/Users/Dmitr/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-g++.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_AR",
@@ -431,11 +407,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "(This variable does not exist and should not be used)"
+					"value" : "C compiler"
 				}
 			],
-			"type" : "UNINITIALIZED",
-			"value" : ""
+			"type" : "STRING",
+			"value" : "C:/Users/Dmitr/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc.exe"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_AR",
@@ -1294,18 +1270,6 @@
 			"value" : "OFF"
 		},
 		{
-			"name" : "ESP_PLATFORM",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : "1"
-		},
-		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Git",
 			"properties" : 
 			[
@@ -1396,18 +1360,6 @@
 			],
 			"type" : "FILEPATH",
 			"value" : "PERL_EXECUTABLE-NOTFOUND"
-		},
-		{
-			"name" : "PYTHON_DEPS_CHECKED",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : "1"
 		},
 		{
 			"name" : "PYTHON_EXECUTABLE",

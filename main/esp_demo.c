@@ -14,6 +14,7 @@
  *     -GPIO27 <-> L298N IN1_1
  *     -GPIO14 <-> L298N IN2_1
  *     -GPIO12 <-> L298N EN1_1
+ *     -GPIO21 <-> G 1/4 Flow Sensor
  */
 #include <stdio.h>
 #include <sys/param.h>
@@ -54,6 +55,9 @@
 static EventGrouphandle_t wifi_event_group;
 const int CONNECTED_BIT = BIT0;
 
+#define FLOW_RATE_PIN = GPIO_NUM_21
+volatile uint16_t flow_samples;
+
 #define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
 #define NO_OF_SAMPLES 1
 
@@ -85,23 +89,24 @@ typedef struct xSense_t
     float ulValue;
 }xSense_t;
 
-QueueHandle_t xSense_Queue;
+QueueHandle_t xSense_Queue, xFlow_Queue;
+
 
 /**
- * @brief Initialize Temperature Sense Mailbox Queue
+ * @brief Initialize Temperature and Flow Rate Sense Mailbox Queue
  */
-void vQueueInit(void)
+xSense_t vQueueInit(void)
 {   
-    xSense_Queue = xQueueCreate(1, sizeof(xSense_t));
+    return xQueueCreate(1, sizeof(xSense_t));
 }
 
-void vUpdateQueue(float ulNewValue)
+void vUpdateQueue(xSense_t *Queue, float ulNewValue)
 {
     xSense_t xData;
     xData.ulValue = ulNewValue;
     xData.xTimeStamp = pdTICKS_TO_MS(xTaskGetTickCount());
     xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
-    xQueueOverwrite(xSense_Queue, &xData);
+    xQueueOverwrite(Queue, &xData);
     xSemaphoreGive(xQueueMutex);
 }
 
@@ -109,10 +114,53 @@ void vUpdateQueue(float ulNewValue)
  * @brief 
  *        Read Mailbox Queue
  * @param pxData Pointer to Struct of type xSense_t for contents to be copied
+ * @param Queue  Pointer to struct of type xSense_T to be read from
  */
-static void vReadQueue(xSense_t *pxData)
+static void vReadQueue(xSense_t *pxData, xSense_t *Queue)
 {
-    xQueuePeek(xSense_Queue, pxData, portMAX_DELAY);
+    xQueuePeek(Queue, pxData, portMAX_DELAY);
+}
+
+/**
+ * @brief Initialize GPIO 21 as Input for Flow Rate Sensor
+ *        Config vFlowInterrupt_Handler as ISR to increment 
+ *        flow_samples
+ */
+void vInit_Flow(void)
+{
+    gpio_config_t gpioConfig;
+    gpioConfig.pin_bit_mask = GPIO_SEL_21;
+    gpioConfig.mode         = GPIO_MODE_INPUT;
+    gpioConfig.pull_up_en   = GPIO_PULLUP_ENABLE;
+    gpioConfig.pull_down_en = GPIO_PULLDOWN_ENABLE;
+    gpioConfig.intr_type    = GPIO_INTR_POSEDGE;
+    gpio_config(&gpioConfig);
+
+    gpio_install_isr_service(0);
+    gpio_isr_handler_add(FLOW_RATE_PIN, vFlowInterrupt_Handler, NULL);
+}
+/**
+ * @brief Flow Rate Task to Read From GR-4028
+ *        Writes to xFlow_Queue every 60 seconds
+ * Flow_Rate = (Pulse Frequency x 60) / 38 (Flow Rate in liters per hour)
+ */
+void vFlow_Rate_Task(void)
+{
+    uint32_t flow_rate = 0;
+    for (;;)
+    {
+    flow_samples = 0
+    vTaskDelay(pdMS_TO_TICKS(60000));
+    flow_rate = (flow_samples / 38 * 60); 
+    vUpdateQueue(xFlow_Queue, flow_rate);
+    vTaskDelay(pdMS_TO_TICKS(10000));
+    }
+    
+}
+
+static void vFlowInterrupt_Handler(void)
+{
+    flow_samples++;
 }
 
 void disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data)
@@ -326,7 +374,7 @@ static void Temp_Sense()
     temp = temp * .1;
     xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
     // Update xSense_Queue
-    vUpdateQueue(temp); 
+    vUpdateQueue(xSense_Queue, temp); 
     xSemaphoreGive(xQueueMutex);
     vTaskDelay(pdMS_TO_TICKS(12000));
     }
@@ -354,7 +402,7 @@ static void vPIDCompute(void *pvParameter)
     for(;;)
     {
         xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(2000));
-        vReadQueue(&pxData);
+        vReadQueue(&pxData, xSense_Queue);
         xSemaphoreGive(xQueueMutex);
         TickType_t now = pdTICKS_TO_MS(xTaskGetTickCount());
         TickType_t time_change = (now - pxData.xTimeStamp) / 1000;
@@ -395,9 +443,6 @@ void app_main(void)
 {   
     printf("********ESP32 7x24 Application********\n");
     nvs_flash_init();
-    tcpip_adapter_init();
-
-
     printf("***Temperature Set to %f Celsius***\n", set_temp);
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(ADC_init());
@@ -405,7 +450,10 @@ void app_main(void)
     ESP_ERROR_CHECK(L298N_init());
     printf("***L298N PWM Module Initialized***\n");
     xQueueMutex = xSemaphoreCreateMutex();
-    vQueueInit();
+    xSense_Queue = vQueueInit();
+    xFlow_Queue = vQueueInit();
+    vInit_Flow();
+
     xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",
                             600,
@@ -420,4 +468,11 @@ void app_main(void)
                             0,
                             NULL,
                             0); 
+    xTaskCreatePinnedToCore(&vFlow_Rate_Task,
+                            "FLOW_SENSE",
+                            600,
+                            NULL,
+                            0,
+                            NULL,
+                            0);
 }

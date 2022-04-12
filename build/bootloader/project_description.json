@@ -1,8 +1,8 @@
 {
     "project_name":       "bootloader",
     "project_path":       "C:/Users/Dmitr/Desktop/esp-idf-2/components/bootloader/subproject",
-    "build_dir":          "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/build/bootloader",
-    "config_file":        "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/sdkconfig",
+    "build_dir":          "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/build/bootloader",
+    "config_file":        "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/sdkconfig",
     "config_defaults":    "",
     "app_elf":            "bootloader.elf",
     "app_bin":            "bootloader.bin",
