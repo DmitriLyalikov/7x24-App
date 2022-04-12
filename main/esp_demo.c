@@ -60,7 +60,7 @@
 #define WIFI_FAIL_BIT      BIT1
 
 #define FLOW_RATE_PIN  GPIO_NUM_21
-volatile uint16_t flow_samples;
+static volatile uint16_t flow_samples;
 
 #define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
 #define NO_OF_SAMPLES 1
@@ -95,7 +95,7 @@ typedef struct xSense_t
     float ulValue;
 }xSense_t;
 
-QueueHandle_t xSense_Queue, xFlow_Queue;
+QueueHandle_t xSense_Queue, xFlow_Queue, xgpio_evt;
 
 
 /**
@@ -127,9 +127,26 @@ static void vReadQueue(xSense_t *pxData, QueueHandle_t Queue)
     xQueuePeek(Queue, pxData, portMAX_DELAY);
 }
 
-void vFlowInterrupt_Handler(void *pvParameter)
+static void IRAM_ATTR vFlow_ISR_Handler(void* arg)
 {
     flow_samples++;
+}
+/**
+ * @brief Flow Rate Task to Read From GR-4028
+ *        Writes to xFlow_Queue every 60 seconds
+ * Flow_Rate = (Pulse Frequency x 60) / 38 (Flow Rate in liters per hour)
+ */
+static void vFlow_Rate_Task(void *pvParameter)
+{
+    uint32_t flow_rate = 0;
+    for (;;){
+    flow_samples = 0;
+    //vTaskDelay(pdMS_TO_TICKS(60000));
+    flow_rate = (flow_samples / 38 * 60); 
+    vUpdateQueue(xFlow_Queue, flow_rate);
+    printf("Flow Rate = %d\n", flow_rate);
+    vTaskDelay(pdMS_TO_TICKS(10000));
+    }
 }
 
 /**
@@ -146,27 +163,21 @@ void vInit_Flow(void)
     gpioConfig.pull_down_en = GPIO_PULLDOWN_ENABLE;
     gpioConfig.intr_type    = GPIO_INTR_POSEDGE;
     gpio_config(&gpioConfig);
+    
+    xTaskCreatePinnedToCore(vFlow_Rate_Task,
+                            "FLOW_SENSE",
+                            600,
+                            NULL,
+                            2,
+                            NULL,
+                            1); 
 
+    //gpio_install_isr_service(0);
+    //gpio_isr_handler_add(FLOW_RATE_PIN, vFlowInterrupt_Handler, NULL);
+    //install gpio isr service
     gpio_install_isr_service(0);
-    gpio_isr_handler_add(FLOW_RATE_PIN, vFlowInterrupt_Handler, NULL);
-}
-/**
- * @brief Flow Rate Task to Read From GR-4028
- *        Writes to xFlow_Queue every 60 seconds
- * Flow_Rate = (Pulse Frequency x 60) / 38 (Flow Rate in liters per hour)
- */
-static void vFlow_Rate_Task(void *pvParameter)
-{
-    uint32_t flow_rate = 0;
-    for (;;)
-    {
-    flow_samples = 0;
-    vTaskDelay(pdMS_TO_TICKS(60000));
-    flow_rate = (flow_samples / 38 * 60); 
-    vUpdateQueue(xFlow_Queue, flow_rate);
-    printf("Flow Rate = %d\n", flow_rate);
-    vTaskDelay(pdMS_TO_TICKS(10000));
-    }
+    //hook isr handler for specific gpio pin
+    gpio_isr_handler_add(FLOW_RATE_PIN, vFlow_ISR_Handler, (void*) FLOW_RATE_PIN);
 }
 
 /*
@@ -502,28 +513,20 @@ void app_main(void)
     xQueueMutex = xSemaphoreCreateMutex();
     xSense_Queue = vQueueInit();
     xFlow_Queue = vQueueInit();
-    vInit_Flow();
     initialise_wifi();
-
+    vInit_Flow();
     xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",
                             600,
                             NULL,
-                            0, 
+                            1, 
                             NULL,
-                            0);
+                            1);
     xTaskCreatePinnedToCore(&vPIDCompute,
                             "PID_Compute",
                             1750,
                             NULL,
-                            0,
+                            1,
                             NULL,
-                            0); 
-    xTaskCreatePinnedToCore(vFlow_Rate_Task,
-                            "FLOW_SENSE",
-                            600,
-                            NULL,
-                            0,
-                            NULL,
-                            0);
+                            1); 
 }
