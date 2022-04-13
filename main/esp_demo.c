@@ -41,6 +41,7 @@
 #include "esp_adc_cal.h"
 #include "esp_wifi.h"
 #include <esp_event.h>
+#include "esp_wpa2.h"
 
 #include "lwip/err.h"
 #include "lwip/sys.h"
@@ -51,14 +52,14 @@
 //#include "aws_iot_version.h"
 //#include "aws_iot_mqtt_client_interface.h"
 
-#define WIFI_SSID "WIFI SSID"
-#define WIFI_PASS "Wifi Password"
+#define WIFI_SSID "FiOS-0DQXW"
+#define WIFI_PASS "fray7inmate700era"
 #define ESP_MAXIMUM_RETRY 5
 
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT      BIT1
 
-#define FLOW_RATE_PIN  GPIO_NUM_21
+#define FLOW_RATE_PIN  GPIO_NUM_12
 
 #define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
 #define NO_OF_SAMPLES 1
@@ -162,7 +163,7 @@ void vInit_Flow(void)
     
     xTaskCreatePinnedToCore(vFlow_Rate_Task,
                             "FLOW_SENSE",
-                            600,
+                            1000,
                             NULL,
                             2,
                             NULL,
