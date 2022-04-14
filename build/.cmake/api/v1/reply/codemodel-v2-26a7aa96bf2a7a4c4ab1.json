@@ -19,22 +19,22 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						73,
 						75,
 						77,
 						79,
-						86,
+						81,
 						88,
 						90,
-						91,
 						92,
-						97,
-						98,
-						103,
-						104,
+						93,
+						94,
+						99,
+						100,
 						105,
 						106,
-						107
+						107,
+						108,
+						109
 					]
 				},
 				{
@@ -119,7 +119,9 @@
 						85,
 						86,
 						87,
-						88
+						88,
+						89,
+						90
 					],
 					"hasInstallRule" : true,
 					"minimumCMakeVersion" : 
@@ -141,7 +143,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_pm",
 					"targetIndexes" : 
 					[
-						27
+						29
 					]
 				},
 				{
@@ -160,8 +162,8 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/mbedtls",
 					"targetIndexes" : 
 					[
-						48,
-						80
+						50,
+						82
 					]
 				},
 				{
@@ -181,7 +183,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/mbedtls/mbedtls",
 					"targetIndexes" : 
 					[
-						74
+						76
 					]
 				},
 				{
@@ -196,10 +198,10 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/mbedtls/mbedtls/library",
 					"targetIndexes" : 
 					[
-						93,
-						94,
 						95,
-						96
+						96,
+						97,
+						98
 					]
 				},
 				{
@@ -225,10 +227,10 @@
 					"targetIndexes" : 
 					[
 						11,
-						81,
-						82,
 						83,
-						102
+						84,
+						85,
+						104
 					]
 				},
 				{
@@ -242,10 +244,10 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/partition_table",
 					"targetIndexes" : 
 					[
-						87,
-						99,
-						100,
-						101
+						89,
+						101,
+						102,
+						103
 					]
 				},
 				{
@@ -287,7 +289,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_ipc",
 					"targetIndexes" : 
 					[
-						24
+						26
 					]
 				},
 				{
@@ -301,7 +303,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/spi_flash",
 					"targetIndexes" : 
 					[
-						61
+						63
 					]
 				},
 				{
@@ -315,7 +317,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/nvs_flash",
 					"targetIndexes" : 
 					[
-						53
+						55
 					]
 				},
 				{
@@ -329,7 +331,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/pthread",
 					"targetIndexes" : 
 					[
-						58
+						60
 					]
 				},
 				{
@@ -343,7 +345,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_gdbstub",
 					"targetIndexes" : 
 					[
-						18
+						20
 					]
 				},
 				{
@@ -361,7 +363,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_system",
 					"targetIndexes" : 
 					[
-						31
+						33
 					]
 				},
 				{
@@ -399,7 +401,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_rom",
 					"targetIndexes" : 
 					[
-						29
+						31
 					]
 				},
 				{
@@ -413,7 +415,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/hal",
 					"targetIndexes" : 
 					[
-						40
+						42
 					]
 				},
 				{
@@ -427,7 +429,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/vfs",
 					"targetIndexes" : 
 					[
-						67
+						69
 					]
 				},
 				{
@@ -441,7 +443,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_eth",
 					"targetIndexes" : 
 					[
-						16
+						18
 					]
 				},
 				{
@@ -455,7 +457,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/tcpip_adapter",
 					"targetIndexes" : 
 					[
-						64
+						66
 					]
 				},
 				{
@@ -469,7 +471,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_netif",
 					"targetIndexes" : 
 					[
-						26
+						28
 					]
 				},
 				{
@@ -483,7 +485,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_event",
 					"targetIndexes" : 
 					[
-						17
+						19
 					]
 				},
 				{
@@ -497,7 +499,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wpa_supplicant",
 					"targetIndexes" : 
 					[
-						70
+						72
 					]
 				},
 				{
@@ -511,7 +513,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_wifi",
 					"targetIndexes" : 
 					[
-						34
+						36
 					]
 				},
 				{
@@ -525,7 +527,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/lwip",
 					"targetIndexes" : 
 					[
-						46
+						48
 					]
 				},
 				{
@@ -539,7 +541,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/log",
 					"targetIndexes" : 
 					[
-						45
+						47
 					]
 				},
 				{
@@ -553,7 +555,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/heap",
 					"targetIndexes" : 
 					[
-						41
+						43
 					]
 				},
 				{
@@ -571,7 +573,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/soc",
 					"targetIndexes" : 
 					[
-						60
+						62
 					]
 				},
 				{
@@ -599,7 +601,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_hw_support",
 					"targetIndexes" : 
 					[
-						23
+						25
 					]
 				},
 				{
@@ -623,7 +625,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_ringbuf",
 					"targetIndexes" : 
 					[
-						28
+						30
 					]
 				},
 				{
@@ -651,7 +653,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/xtensa",
 					"targetIndexes" : 
 					[
-						71
+						73
 					]
 				},
 				{
@@ -665,7 +667,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/espcoredump",
 					"targetIndexes" : 
 					[
-						35
+						37
 					]
 				},
 				{
@@ -679,7 +681,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/perfmon",
 					"targetIndexes" : 
 					[
-						55
+						57
 					]
 				},
 				{
@@ -694,8 +696,8 @@
 					"targetIndexes" : 
 					[
 						13,
-						72,
-						89
+						74,
+						91
 					]
 				},
 				{
@@ -709,7 +711,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_common",
 					"targetIndexes" : 
 					[
-						15
+						17
 					]
 				},
 				{
@@ -723,7 +725,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_timer",
 					"targetIndexes" : 
 					[
-						32
+						34
 					]
 				},
 				{
@@ -737,7 +739,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/freertos",
 					"targetIndexes" : 
 					[
-						39
+						41
 					]
 				},
 				{
@@ -755,7 +757,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/newlib",
 					"targetIndexes" : 
 					[
-						51
+						53
 					]
 				},
 				{
@@ -821,8 +823,8 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/bootloader",
 					"targetIndexes" : 
 					[
-						78,
-						85
+						80,
+						87
 					]
 				},
 				{
@@ -860,7 +862,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/unity",
 					"targetIndexes" : 
 					[
-						66
+						68
 					]
 				},
 				{
@@ -916,7 +918,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/nghttp",
 					"targetIndexes" : 
 					[
-						52
+						54
 					]
 				},
 				{
@@ -944,7 +946,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_adc_cal",
 					"targetIndexes" : 
 					[
-						14
+						16
 					]
 				},
 				{
@@ -958,7 +960,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_hid",
 					"targetIndexes" : 
 					[
-						19
+						21
 					]
 				},
 				{
@@ -972,7 +974,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/tcp_transport",
 					"targetIndexes" : 
 					[
-						63
+						65
 					]
 				},
 				{
@@ -986,7 +988,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_http_client",
 					"targetIndexes" : 
 					[
-						20
+						22
 					]
 				},
 				{
@@ -1000,7 +1002,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_http_server",
 					"targetIndexes" : 
 					[
-						21
+						23
 					]
 				},
 				{
@@ -1014,7 +1016,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_https_ota",
 					"targetIndexes" : 
 					[
-						22
+						24
 					]
 				},
 				{
@@ -1038,7 +1040,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/protobuf-c",
 					"targetIndexes" : 
 					[
-						56
+						58
 					]
 				},
 				{
@@ -1052,7 +1054,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/protocomm",
 					"targetIndexes" : 
 					[
-						57
+						59
 					]
 				},
 				{
@@ -1066,7 +1068,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/mdns",
 					"targetIndexes" : 
 					[
-						49
+						51
 					]
 				},
 				{
@@ -1080,7 +1082,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_local_ctrl",
 					"targetIndexes" : 
 					[
-						25
+						27
 					]
 				},
 				{
@@ -1094,7 +1096,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/sdmmc",
 					"targetIndexes" : 
 					[
-						59
+						61
 					]
 				},
 				{
@@ -1108,7 +1110,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_serial_slave_link",
 					"targetIndexes" : 
 					[
-						30
+						32
 					]
 				},
 				{
@@ -1122,7 +1124,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_websocket_client",
 					"targetIndexes" : 
 					[
-						33
+						35
 					]
 				},
 				{
@@ -1136,8 +1138,8 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esptool_py",
 					"targetIndexes" : 
 					[
-						76,
-						84
+						78,
+						86
 					]
 				},
 				{
@@ -1151,7 +1153,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/expat",
 					"targetIndexes" : 
 					[
-						36
+						38
 					]
 				},
 				{
@@ -1165,7 +1167,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wear_levelling",
 					"targetIndexes" : 
 					[
-						68
+						70
 					]
 				},
 				{
@@ -1179,7 +1181,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/fatfs",
 					"targetIndexes" : 
 					[
-						37
+						39
 					]
 				},
 				{
@@ -1193,7 +1195,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/freemodbus",
 					"targetIndexes" : 
 					[
-						38
+						40
 					]
 				},
 				{
@@ -1217,7 +1219,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/jsmn",
 					"targetIndexes" : 
 					[
-						42
+						44
 					]
 				},
 				{
@@ -1231,7 +1233,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/json",
 					"targetIndexes" : 
 					[
-						43
+						45
 					]
 				},
 				{
@@ -1245,7 +1247,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/libsodium",
 					"targetIndexes" : 
 					[
-						44
+						46
 					]
 				},
 				{
@@ -1259,7 +1261,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/mqtt",
 					"targetIndexes" : 
 					[
-						50
+						52
 					]
 				},
 				{
@@ -1273,7 +1275,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/openssl",
 					"targetIndexes" : 
 					[
-						54
+						56
 					]
 				},
 				{
@@ -1287,7 +1289,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/spiffs",
 					"targetIndexes" : 
 					[
-						62
+						64
 					]
 				},
 				{
@@ -1311,7 +1313,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/ulp",
 					"targetIndexes" : 
 					[
-						65
+						67
 					]
 				},
 				{
@@ -1325,7 +1327,7 @@
 					"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning",
 					"targetIndexes" : 
 					[
-						69
+						71
 					]
 				},
 				{
@@ -1343,6 +1345,34 @@
 					]
 				},
 				{
+					"build" : "esp-idf/esp32-smbus",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "components/esp32-smbus",
+					"targetIndexes" : 
+					[
+						15
+					]
+				},
+				{
+					"build" : "esp-idf/esp32-i2c-lcd1602",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.5"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "components/esp32-i2c-lcd1602",
+					"targetIndexes" : 
+					[
+						14
+					]
+				},
+				{
 					"build" : "esp-idf/main",
 					"minimumCMakeVersion" : 
 					{
@@ -1353,7 +1383,7 @@
 					"source" : "main",
 					"targetIndexes" : 
 					[
-						47
+						49
 					]
 				}
 			],
@@ -1372,22 +1402,22 @@
 					"name" : "esp_demo",
 					"targetIndexes" : 
 					[
-						73,
 						75,
 						77,
 						79,
-						86,
+						81,
 						88,
 						90,
-						91,
 						92,
-						97,
-						98,
-						103,
-						104,
+						93,
+						94,
+						99,
+						100,
 						105,
 						106,
-						107
+						107,
+						108,
+						109
 					]
 				},
 				{
@@ -1481,7 +1511,9 @@
 						85,
 						86,
 						87,
-						88
+						88,
+						89,
+						90
 					],
 					"name" : "esp-idf",
 					"parentIndex" : 0,
@@ -1560,20 +1592,22 @@
 						70,
 						71,
 						72,
-						76,
+						73,
+						74,
 						78,
 						80,
-						81,
 						82,
 						83,
 						84,
 						85,
+						86,
 						87,
 						89,
-						99,
-						100,
+						91,
 						101,
-						102
+						102,
+						103,
+						104
 					]
 				},
 				{
@@ -1587,11 +1621,11 @@
 					"parentIndex" : 1,
 					"targetIndexes" : 
 					[
-						74,
-						93,
-						94,
+						76,
 						95,
-						96
+						96,
+						97,
+						98
 					]
 				}
 			],
@@ -1614,7 +1648,7 @@
 				{
 					"directoryIndex" : 9,
 					"id" : "__idf_app_update::@cc3b426666063acc9674",
-					"jsonFile" : "target-__idf_app_update-17238b47ac9dd7e1249c.json",
+					"jsonFile" : "target-__idf_app_update-b7efcbdaf0b358451040.json",
 					"name" : "__idf_app_update",
 					"projectIndex" : 1
 				},
@@ -1693,6 +1727,20 @@
 					"id" : "__idf_esp32::@c361781f7cb51efad0ea",
 					"jsonFile" : "target-__idf_esp32-fc5da1e8933550a03b81.json",
 					"name" : "__idf_esp32",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 89,
+					"id" : "__idf_esp32-i2c-lcd1602::@059ac46500ce06866256",
+					"jsonFile" : "target-__idf_esp32-i2c-lcd1602-7b6d5b5546f2a6ab8aed.json",
+					"name" : "__idf_esp32-i2c-lcd1602",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 88,
+					"id" : "__idf_esp32-smbus::@063725e9ff6f0766ee93",
+					"jsonFile" : "target-__idf_esp32-smbus-6838361aff65cd2cc550.json",
+					"name" : "__idf_esp32-smbus",
 					"projectIndex" : 1
 				},
 				{
@@ -1775,7 +1823,7 @@
 				{
 					"directoryIndex" : 68,
 					"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef",
-					"jsonFile" : "target-__idf_esp_local_ctrl-da5b3a1a0fc16cac10d3.json",
+					"jsonFile" : "target-__idf_esp_local_ctrl-73e5123bdeed35c1d712.json",
 					"name" : "__idf_esp_local_ctrl",
 					"projectIndex" : 1
 				},
@@ -1927,9 +1975,9 @@
 					"projectIndex" : 1
 				},
 				{
-					"directoryIndex" : 88,
+					"directoryIndex" : 90,
 					"id" : "__idf_main::@7368607ed66887415643",
-					"jsonFile" : "target-__idf_main-e3833e9e97dd1de6c718.json",
+					"jsonFile" : "target-__idf_main-7aeb83aab99b5535ac01.json",
 					"name" : "__idf_main",
 					"projectIndex" : 1
 				},
@@ -2083,7 +2131,7 @@
 				{
 					"directoryIndex" : 86,
 					"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098",
-					"jsonFile" : "target-__idf_wifi_provisioning-6961e66f2f5fdc85f5e2.json",
+					"jsonFile" : "target-__idf_wifi_provisioning-c6821211494465b9e75b.json",
 					"name" : "__idf_wifi_provisioning",
 					"projectIndex" : 1
 				},
@@ -2104,7 +2152,7 @@
 				{
 					"directoryIndex" : 40,
 					"id" : "__ldgen_output_esp32.project.ld::@c361781f7cb51efad0ea",
-					"jsonFile" : "target-__ldgen_output_esp32.project.ld-76f34e72226086b098e3.json",
+					"jsonFile" : "target-__ldgen_output_esp32.project.ld-06869026d9ffe554cea6.json",
 					"name" : "__ldgen_output_esp32.project.ld",
 					"projectIndex" : 1
 				},
@@ -2230,7 +2278,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "esp_demo.elf::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-esp_demo.elf-13c0056a5d41ad62d84e.json",
+					"jsonFile" : "target-esp_demo.elf-14950be5172f1431b891.json",
 					"name" : "esp_demo.elf",
 					"projectIndex" : 0
 				},

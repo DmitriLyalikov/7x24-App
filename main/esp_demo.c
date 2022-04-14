@@ -35,6 +35,7 @@
 
 #include "driver/gpio.h"
 #include "driver/adc.h"
+#include "driver/i2c.h"
 #include "nvs_flash.h"
 #include "L298N.h"
 
@@ -42,9 +43,10 @@
 #include "esp_wifi.h"
 #include <esp_event.h>
 #include "esp_wpa2.h"
+#include "esp_netif.h"
 
-#include "lwip/err.h"
-#include "lwip/sys.h"
+#include "smbus.h"
+#include "i2c-lcd1602.h"
 
 // #include "certs.h"
 //#include "aws_iot_config.h"
@@ -59,7 +61,7 @@
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT      BIT1
 
-#define FLOW_RATE_PIN  GPIO_NUM_12
+#define FLOW_RATE_PIN  GPIO_NUM_21
 
 #define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
 #define NO_OF_SAMPLES 1
@@ -67,6 +69,13 @@
 #define MIN_INTEGRAL 2.0         // Min integral value
 #define MAX_INTEGRAL 10.0        // Max Integral Value
 #define EPSILON      0.01
+
+#define I2C_MASTER_NUM           I2C_NUM_0
+#define I2C_MASTER_TX_BUF_LEN    0                     // disabled
+#define I2C_MASTER_RX_BUF_LEN    0                     // disabled
+#define I2C_MASTER_FREQ_HZ       100000
+#define I2C_MASTER_SDA_IO        CONFIG_I2C_MASTER_SDA
+#define I2C_MASTER_SCL_IO        CONFIG_I2C_MASTER_SCL
 
 static const float kp = 2;       //Integral Ratio
 static const float ki = 5;       // Differential ratio 1
@@ -85,6 +94,7 @@ static const adc_unit_t unit = ADC_UNIT_1;
 
 static SemaphoreHandle_t xQueueMutex;
 static EventGroupHandle_t s_wifi_event_group;
+static esp_netif_t *sta_netif = NULL;
 static int s_retry_num = 0;
 
 typedef struct xSense_t
@@ -122,6 +132,22 @@ void vUpdateQueue(QueueHandle_t Queue, float ulNewValue)
 static void vReadQueue(xSense_t *pxData, QueueHandle_t Queue)
 {
     xQueuePeek(Queue, pxData, portMAX_DELAY);
+}
+
+static void i2c_master_init(void)
+{
+    int i2c_master_port = I2C_MASTER_NUM;
+    i2c_config_t conf;
+    conf.mode = I2C_MODE_MASTER;
+    conf.sda_io_num = I2C_MASTER_SDA_IO;
+    conf.sda_pullup_en = GPIO_PULLUP_DISABLE;  // GY-2561 provides 10kΩ pullups
+    conf.scl_io_num = I2C_MASTER_SCL_IO;
+    conf.scl_pullup_en = GPIO_PULLUP_DISABLE;  // GY-2561 provides 10kΩ pullups
+    conf.master.clk_speed = I2C_MASTER_FREQ_HZ;
+    i2c_param_config(i2c_master_port, &conf);
+    i2c_driver_install(i2c_master_port, conf.mode,
+                       I2C_MASTER_RX_BUF_LEN,
+                       I2C_MASTER_TX_BUF_LEN, 0);
 }
 
 static void IRAM_ATTR vFlow_ISR_Handler(void* arg)
@@ -508,6 +534,7 @@ void app_main(void)
     xFlow_Queue = vQueueInit();
     initialise_wifi();
     vInit_Flow();
+    i2c_master_init();
     xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",
                             600,
