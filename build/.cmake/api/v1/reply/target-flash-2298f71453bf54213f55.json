@@ -83,15 +83,15 @@
 	[
 		{
 			"backtrace" : 9,
-			"id" : "partition_table_bin::@8e7a60ee4fe55e1aaabf"
-		},
-		{
-			"backtrace" : 9,
 			"id" : "app::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 9,
 			"id" : "bootloader::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "partition_table_bin::@8e7a60ee4fe55e1aaabf"
 		}
 	],
 	"id" : "flash::@6890427a1f51a3e7e1df",

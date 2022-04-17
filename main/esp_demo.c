@@ -15,8 +15,6 @@
  *     -GPIO14 <-> L298N IN2_1
  *     -GPIO12 <-> L298N EN1_1
  *     -GPIO21 <-> G 1/4 Flow Sensor
- *     I2C_MASTER_SDA GPIO18 <-> LCD1602_SDA
- *     I2C_MASTER_SCL GPIO19 <-> LCD1602_SCL
  */
 #include <stdio.h>
 #include <sys/param.h>
@@ -47,7 +45,10 @@
 #include "esp_wpa2.h"
 #include "esp_netif.h"
 
-#include "LCDInterface.h"
+#include "smbus.h"
+#include "i2c-lcd1602.h"
+
+
 
 // #include "certs.h"
 //#include "aws_iot_config.h"
@@ -60,6 +61,14 @@
 #define LCD_NUM_COLUMNS            32
 #define LCD_NUM_VISIBLE_COLUMNS    16
 
+#define I2C_MASTER_NUM           I2C_NUM_0
+#define I2C_MASTER_TX_BUF_LEN    0                     // disabled
+#define I2C_MASTER_RX_BUF_LEN    0                     // disabled
+#define I2C_MASTER_FREQ_HZ       100000
+#define I2C_MASTER_SDA_IO        CONFIG_I2C_MASTER_SDA
+#define I2C_MASTER_SCL_IO        CONFIG_I2C_MASTER_SCL
+
+
 #define WIFI_SSID "FiOS-0DQXW"
 #define WIFI_PASS "fray7inmate700era"
 #define ESP_MAXIMUM_RETRY 5
@@ -70,7 +79,7 @@
 #define FLOW_RATE_PIN  GPIO_NUM_21
 
 #define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
-#define NO_OF_SAMPLES 1
+#define NO_OF_SAMPLES 20
 
 #define MIN_INTEGRAL 2.0         // Min integral value
 #define MAX_INTEGRAL 10.0        // Max Integral Value
@@ -93,11 +102,7 @@ static const adc_unit_t unit = ADC_UNIT_1;
 
 static SemaphoreHandle_t xQueueMutex;
 static EventGroupHandle_t s_wifi_event_group;
-static esp_netif_t *sta_netif = NULL;
 static int s_retry_num = 0;
-
-uint8_t LCD_pins[6] = {GPIO_NUM_23, GPIO_NUM_19, GPIO_NUM_18, GPIO_NUM_17, GPIO_NUM_16, GPIO_NUM_15};
-
 
 typedef struct xSense_t
 {
@@ -120,9 +125,9 @@ void vUpdateQueue(QueueHandle_t Queue, float ulNewValue)
     xSense_t xData;
     xData.ulValue = ulNewValue;
     xData.xTimeStamp = pdTICKS_TO_MS(xTaskGetTickCount());
-    xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
+    // xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
     xQueueOverwrite(Queue, &xData);
-    xSemaphoreGive(xQueueMutex);
+    // xSemaphoreGive(xQueueMutex);
 }
 
 /**
@@ -150,8 +155,8 @@ static void vFlow_Rate_Task(void *pvParameter)
     uint32_t flow_rate = 0;
     for (;;){
     flow_samples = 0;
-    //vTaskDelay(pdMS_TO_TICKS(60000));
-    flow_rate = (flow_samples / 38 * 60); 
+        //vTaskDelay(pdMS_TO_TICKS(60000));
+    flow_rate = (flow_samples / 38 * 60) + 6; 
     vUpdateQueue(xFlow_Queue, flow_rate);
     printf("Flow Rate = %d\n", flow_rate);
     vTaskDelay(pdMS_TO_TICKS(10000));
@@ -177,7 +182,7 @@ void vInit_Flow(void)
                             "FLOW_SENSE",
                             1000,
                             NULL,
-                            2,
+                            1,
                             NULL,
                             1); 
     gpio_install_isr_service(0);
@@ -407,6 +412,70 @@ static void record_temp_task(void *pvParameters)
 }
 */
 
+static void i2c_master_init(void)
+{
+    int i2c_master_port = I2C_MASTER_NUM;
+    i2c_config_t conf;
+    conf.mode = I2C_MODE_MASTER;
+    conf.sda_io_num = I2C_MASTER_SDA_IO;
+    conf.sda_pullup_en = GPIO_PULLUP_DISABLE;  // GY-2561 provides 10kΩ pullups
+    conf.scl_io_num = I2C_MASTER_SCL_IO;
+    conf.scl_pullup_en = GPIO_PULLUP_DISABLE;  // GY-2561 provides 10kΩ pullups
+    conf.master.clk_speed = I2C_MASTER_FREQ_HZ;
+    i2c_param_config(i2c_master_port, &conf);
+    i2c_driver_install(i2c_master_port, conf.mode,
+                       I2C_MASTER_RX_BUF_LEN,
+                       I2C_MASTER_TX_BUF_LEN, 0);
+}
+
+static void lcd1602_display()
+{
+    // Init I2C Master
+    i2c_master_init();
+    i2c_port_t i2c_num = I2C_MASTER_NUM;
+    uint8_t address = CONFIG_LCD1602_I2C_ADDRESS;
+
+    // Init SMBus
+    smbus_info_t * smbus_info = smbus_malloc();
+    ESP_ERROR_CHECK(smbus_init(smbus_info, i2c_num, address));
+    ESP_ERROR_CHECK(smbus_set_timeout(smbus_info, 1000 / portTICK_RATE_MS));
+
+    // Init LCD1602 device 
+        i2c_lcd1602_info_t * lcd_info = i2c_lcd1602_malloc();
+    ESP_ERROR_CHECK(i2c_lcd1602_init(lcd_info, smbus_info, true,
+                                     LCD_NUM_ROWS, LCD_NUM_COLUMNS, LCD_NUM_VISIBLE_COLUMNS));
+    ESP_ERROR_CHECK(i2c_lcd1602_reset(lcd_info));
+    i2c_lcd1602_set_backlight(lcd_info, true);
+
+    i2c_lcd1602_write_string(lcd_info, "Temp (C):");
+    i2c_lcd1602_move_cursor(lcd_info, 0, 1);
+    i2c_lcd1602_write_string(lcd_info, "Flow Rate(L/M):");
+    char temp_read[50];
+    xSense_t pxData = {
+        .ulValue = 0,
+        .xTimeStamp = 0,
+    };
+    for (;;)
+    {
+        xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(2000));
+        vReadQueue(&pxData, xSense_Queue);
+        xSemaphoreGive(xQueueMutex);
+        sprintf(temp_read, "%g", pxData.ulValue);
+        i2c_lcd1602_move_cursor(lcd_info, 9, 0);
+        i2c_lcd1602_write_string(lcd_info, temp_read);
+        i2c_lcd1602_write_char(lcd_info, I2C_LCD1602_CHARACTER_DEGREE);
+
+        xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(2000));
+        vReadQueue(&pxData, xFlow_Queue);
+        xSemaphoreGive(xQueueMutex);
+        sprintf(temp_read, "%g", pxData.ulValue);
+        i2c_lcd1602_move_cursor(lcd_info, 15, 1);
+        i2c_lcd1602_write_string(lcd_info, temp_read);
+
+        vTaskDelay(pdMS_TO_TICKS(10000)); 
+    }
+}
+
 /**
 *@brief
 *  Config ADC (GPIO 34)
@@ -493,8 +562,8 @@ static void vPIDCompute(void *pvParameter)
         if (PID_Output < 70){
             PID_Output = 0;
         }
-        vL298N_control(PID_Output);
-        printf("PID OUTPUT: %f\n", PID_Output);
+        vL298N_control(100);
+        printf("PID OUTPUT: %d\n", 100);
         vTaskDelay(pdMS_TO_TICKS(12000));
     }
 }
@@ -520,7 +589,8 @@ void app_main(void)
     xFlow_Queue = vQueueInit();
     initialise_wifi();
     vInit_Flow();
-    setupLCD(LCD_pins);
+    // lcd1602_display();
+    // xTaskCreate(&lcd1602_task, "lcd1602_task", 4096, NULL, 5, NULL);
     xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",
                             600,
@@ -530,6 +600,13 @@ void app_main(void)
                             1);
     xTaskCreatePinnedToCore(&vPIDCompute,
                             "PID_Compute",
+                            1750,
+                            NULL,
+                            1,
+                            NULL,
+                            1); 
+    xTaskCreatePinnedToCore(&lcd1602_display,
+                            "LCD_Display",
                             1750,
                             NULL,
                             1,
