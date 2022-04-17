@@ -2,30 +2,6 @@
 	"entries" : 
 	[
 		{
-			"name" : "CCACHE_ENABLE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : "1"
-		},
-		{
-			"name" : "CCACHE_FOUND",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Path to a program."
-				}
-			],
-			"type" : "FILEPATH",
-			"value" : "C:/Users/Dmitr/.espressif/tools/ccache/3.7/ccache.exe"
-		},
-		{
 			"name" : "CMAKE_ADDR2LINE",
 			"properties" : 
 			[
@@ -56,6 +32,22 @@
 			],
 			"type" : "FILEPATH",
 			"value" : "C:/Users/Dmitr/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-ar.exe"
+		},
+		{
+			"name" : "CMAKE_ASM_COMPILER",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "(This variable does not exist and should not be used)"
+				}
+			],
+			"type" : "UNINITIALIZED",
+			"value" : ""
 		},
 		{
 			"name" : "CMAKE_ASM_COMPILER_AR",
@@ -1278,18 +1270,6 @@
 			"value" : "OFF"
 		},
 		{
-			"name" : "ESP_PLATFORM",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : "1"
-		},
-		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Git",
 			"properties" : 
 			[
@@ -1382,18 +1362,6 @@
 			"value" : "PERL_EXECUTABLE-NOTFOUND"
 		},
 		{
-			"name" : "PYTHON_DEPS_CHECKED",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : "1"
-		},
-		{
 			"name" : "PYTHON_EXECUTABLE",
 			"properties" : 
 			[
@@ -1459,18 +1427,6 @@
 		},
 		{
 			"name" : "__idf_L298N_LIB_DEPENDS",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Dependencies for the target"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "general;__idf_cxx;general;__idf_newlib;general;__idf_freertos;general;__idf_esp_hw_support;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_soc;general;__idf_hal;general;__idf_esp_rom;general;__idf_esp_common;general;__idf_esp_system;general;__idf_esp32;"
-		},
-		{
-			"name" : "__idf_LCDInterface_LIB_DEPENDS",
 			"properties" : 
 			[
 				{

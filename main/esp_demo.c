@@ -48,8 +48,6 @@
 #include "smbus.h"
 #include "i2c-lcd1602.h"
 
-
-
 // #include "certs.h"
 //#include "aws_iot_config.h"
 //#include "aws_iot_log.h"
@@ -67,7 +65,6 @@
 #define I2C_MASTER_FREQ_HZ       100000
 #define I2C_MASTER_SDA_IO        CONFIG_I2C_MASTER_SDA
 #define I2C_MASTER_SCL_IO        CONFIG_I2C_MASTER_SCL
-
 
 #define WIFI_SSID "FiOS-0DQXW"
 #define WIFI_PASS "fray7inmate700era"

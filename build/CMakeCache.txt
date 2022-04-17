@@ -14,12 +14,6 @@
 # EXTERNAL cache entries
 ########################
 
-//No help, variable specified on the command line.
-CCACHE_ENABLE:UNINITIALIZED=1
-
-//Path to a program.
-CCACHE_FOUND:FILEPATH=C:/Users/Dmitr/.espressif/tools/ccache/3.7/ccache.exe
-
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=C:/Users/Dmitr/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-addr2line.exe
 
@@ -247,9 +241,6 @@ ENABLE_TESTING:BOOL=
 //Build mbed TLS with zlib library.
 ENABLE_ZLIB_SUPPORT:BOOL=OFF
 
-//No help, variable specified on the command line.
-ESP_PLATFORM:UNINITIALIZED=1
-
 //Git command line client
 GIT_EXECUTABLE:FILEPATH=C:/Program Files/Git/cmd/git.exe
 
@@ -264,9 +255,6 @@ LINK_WITH_PTHREAD:BOOL=OFF
 
 //Path to a program.
 PERL_EXECUTABLE:FILEPATH=PERL_EXECUTABLE-NOTFOUND
-
-//No help, variable specified on the command line.
-PYTHON_DEPS_CHECKED:UNINITIALIZED=1
 
 //Path to a program.
 PYTHON_EXECUTABLE:FILEPATH=C:/Users/Dmitr/.espressif/python_env/idf4.3_py3.9_env/Scripts/python.exe
@@ -285,9 +273,6 @@ USE_STATIC_MBEDTLS_LIBRARY:BOOL=ON
 
 //Dependencies for the target
 __idf_L298N_LIB_DEPENDS:STATIC=general;__idf_cxx;general;__idf_newlib;general;__idf_freertos;general;__idf_esp_hw_support;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_soc;general;__idf_hal;general;__idf_esp_rom;general;__idf_esp_common;general;__idf_esp_system;general;__idf_esp32;
-
-//Dependencies for the target
-__idf_LCDInterface_LIB_DEPENDS:STATIC=general;__idf_cxx;general;__idf_newlib;general;__idf_freertos;general;__idf_esp_hw_support;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_soc;general;__idf_hal;general;__idf_esp_rom;general;__idf_esp_common;general;__idf_esp_system;general;__idf_esp32;
 
 //Dependencies for the target
 __idf_app_trace_LIB_DEPENDS:STATIC=general;__idf_cxx;general;__idf_newlib;general;__idf_freertos;general;__idf_esp_hw_support;general;__idf_heap;general;__idf_log;general;__idf_lwip;general;__idf_soc;general;__idf_hal;general;__idf_esp_rom;general;__idf_esp_common;general;__idf_esp_system;general;__idf_esp32;
