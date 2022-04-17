@@ -107,7 +107,7 @@ static int s_retry_num = 0;
 typedef struct xSense_t
 {
     TickType_t xTimeStamp;
-    float ulValue;
+    uint16_t ulValue;
 }xSense_t;
 
 QueueHandle_t xSense_Queue, xFlow_Queue, xgpio_evt;
@@ -237,6 +237,9 @@ static void event_handler(void* arg, esp_event_base_t event_base,
     }
 }
 
+/**
+ * @brief Initialise wifi station and event loop
+ */
 static void initialise_wifi(void)
 {
     s_wifi_event_group = xEventGroupCreate();
@@ -411,6 +414,11 @@ static void record_temp_task(void *pvParameters)
 }
 */
 
+/**
+ * @brief Initialize I2C Master bus for LCD1602 Display
+ *        SCL - GPIO19
+ *        SDA - GPIO18
+ */
 static void i2c_master_init(void)
 {
     int i2c_master_port = I2C_MASTER_NUM;
@@ -427,6 +435,11 @@ static void i2c_master_init(void)
                        I2C_MASTER_TX_BUF_LEN, 0);
 }
 
+/**
+ * @brief LCD1602 Task 
+ * Display Temperature and Flow Rate
+ * Update every 10 seconds
+ */
 static void lcd1602_display()
 {
     // Init I2C Master
@@ -459,7 +472,7 @@ static void lcd1602_display()
         xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(2000));
         vReadQueue(&pxData, xSense_Queue);
         xSemaphoreGive(xQueueMutex);
-        sprintf(temp_read, "%g", pxData.ulValue);
+        sprintf(temp_read, "%d", pxData.ulValue);
         i2c_lcd1602_move_cursor(lcd_info, 9, 0);
         i2c_lcd1602_write_string(lcd_info, temp_read);
         i2c_lcd1602_write_char(lcd_info, I2C_LCD1602_CHARACTER_DEGREE);
@@ -467,8 +480,8 @@ static void lcd1602_display()
         xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(2000));
         vReadQueue(&pxData, xFlow_Queue);
         xSemaphoreGive(xQueueMutex);
-        sprintf(temp_read, "%g", pxData.ulValue);
-        i2c_lcd1602_move_cursor(lcd_info, 15, 1);
+        sprintf(temp_read, "%d", pxData.ulValue);
+        i2c_lcd1602_move_cursor(lcd_info, 10, 1);
         i2c_lcd1602_write_string(lcd_info, temp_read);
 
         vTaskDelay(pdMS_TO_TICKS(10000)); 
@@ -502,10 +515,13 @@ static void Temp_Sense()
 {   
     for(;;){
     // TickType_t xTimeNow = xTaskGetTickCount();
-    float temp = 0;
-    temp = (adc1_get_raw((adc1_channel_t)channel));    
-    temp = (esp_adc_cal_raw_to_voltage(temp, adc_chars));
-    temp = temp * .1;
+    uint16_t temp, sum = 0;
+    for (uint8_t i = 0; i < NO_OF_SAMPLES; i++){
+        temp = (adc1_get_raw((adc1_channel_t)channel));    
+        temp = (esp_adc_cal_raw_to_voltage(temp, adc_chars));
+        sum  += temp * .1;
+    }
+    temp = (sum / NO_OF_SAMPLES);
     xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
     // Update xSense_Queue
     vUpdateQueue(xSense_Queue, temp); 
@@ -541,7 +557,7 @@ static void vPIDCompute(void *pvParameter)
         TickType_t now = pdTICKS_TO_MS(xTaskGetTickCount());
         TickType_t time_change = (now - pxData.xTimeStamp) / 1000;
         float error = -(set_temp - pxData.ulValue);
-        printf("Read Temp: %f\n", pxData.ulValue);
+        printf("Read Temp: %d\n", pxData.ulValue);
         // Proportional Branch
         up = kp * error;
         // Integral Branch

@@ -42,10 +42,10 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "gen_project_binary::@6890427a1f51a3e7e1df"
+			"id" : "bootloader::@6890427a1f51a3e7e1df"
 		},
 		{
-			"id" : "bootloader::@6890427a1f51a3e7e1df"
+			"id" : "gen_project_binary::@6890427a1f51a3e7e1df"
 		}
 	],
 	"id" : "uf2::@6890427a1f51a3e7e1df",

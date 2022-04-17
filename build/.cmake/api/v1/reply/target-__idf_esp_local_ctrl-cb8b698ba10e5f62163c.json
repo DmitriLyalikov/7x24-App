@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "esp-idf/wifi_provisioning/libwifi_provisioning.a"
+			"path" : "esp-idf/esp_local_ctrl/libesp_local_ctrl.a"
 		}
 	],
 	"backtrace" : 2,
@@ -25,7 +25,7 @@
 		"files" : 
 		[
 			"C:/Users/Dmitr/Desktop/esp-idf-2/tools/cmake/component.cmake",
-			"C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/CMakeLists.txt",
+			"C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_local_ctrl/CMakeLists.txt",
 			"C:/Users/Dmitr/Desktop/esp-idf-2/tools/cmake/utilities.cmake"
 		],
 		"nodes" : 
@@ -36,7 +36,7 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 18,
+				"line" : 19,
 				"parent" : 0
 			},
 			{
@@ -76,12 +76,6 @@
 				"parent" : 6
 			},
 			{
-				"command" : 2,
-				"file" : 0,
-				"line" : 328,
-				"parent" : 6
-			},
-			{
 				"command" : 5,
 				"file" : 0,
 				"line" : 454,
@@ -97,13 +91,19 @@
 				"command" : 5,
 				"file" : 2,
 				"line" : 282,
-				"parent" : 10
+				"parent" : 9
 			},
 			{
 				"command" : 5,
 				"file" : 0,
 				"line" : 464,
 				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 331,
+				"parent" : 4
 			},
 			{
 				"command" : 7,
@@ -164,84 +164,88 @@
 					"fragment" : "-mlongcalls -Wno-frame-address  "
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-ffunction-sections"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-fdata-sections"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Wall"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Werror=all"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Wno-error=unused-function"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Wno-error=unused-variable"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Wno-error=deprecated-declarations"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Wextra"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Wno-unused-parameter"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Wno-sign-compare"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-ggdb"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Og"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-fstrict-volatile-bitfields"
 				},
 				{
-					"backtrace" : 9,
+					"backtrace" : 8,
 					"fragment" : "-Wno-error=unused-but-set-variable"
 				},
 				{
-					"backtrace" : 11,
+					"backtrace" : 10,
 					"fragment" : "-std=gnu99"
 				},
 				{
-					"backtrace" : 11,
+					"backtrace" : 10,
 					"fragment" : "-Wno-old-style-declaration"
 				},
 				{
-					"backtrace" : 12,
+					"backtrace" : 11,
 					"fragment" : "-D_GNU_SOURCE"
 				},
 				{
-					"backtrace" : 12,
+					"backtrace" : 11,
 					"fragment" : "-DIDF_VER=\\\"v4.3.1-dirty\\\""
 				},
 				{
-					"backtrace" : 12,
+					"backtrace" : 11,
 					"fragment" : "-DESP_PLATFORM"
 				}
 			],
 			"defines" : 
 			[
+				{
+					"backtrace" : 12,
+					"define" : "HAVE_CONFIG_H"
+				},
 				{
 					"backtrace" : 5,
 					"define" : "MBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\""
@@ -255,15 +259,15 @@
 				},
 				{
 					"backtrace" : 15,
-					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/include"
+					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_local_ctrl/include"
 				},
 				{
 					"backtrace" : 17,
-					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/src"
+					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_local_ctrl/proto-c"
 				},
 				{
 					"backtrace" : 18,
-					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/proto-c"
+					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_local_ctrl/src"
 				},
 				{
 					"backtrace" : 19,
@@ -470,6 +474,26 @@
 					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/mbedtls/esp_crt_bundle/include"
 				},
 				{
+					"backtrace" : 12,
+					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_http_server/include"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/nghttp/port/include"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/nghttp/nghttp2/lib/includes"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp-tls"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp-tls/esp-tls-crypto"
+				},
+				{
 					"backtrace" : 20,
 					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/protobuf-c/protobuf-c"
 				},
@@ -480,10 +504,6 @@
 				{
 					"backtrace" : 7,
 					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/console"
-				},
-				{
-					"backtrace" : 8,
-					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/json/cJSON"
 				}
 			],
 			"language" : "C",
@@ -491,13 +511,7 @@
 			[
 				0,
 				1,
-				2,
-				3,
-				4,
-				5,
-				6,
-				7,
-				8
+				2
 			]
 		}
 	],
@@ -516,25 +530,21 @@
 			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
 		},
 		{
-			"backtrace" : 7,
-			"id" : "__idf_mdns::@2f076c6da9dadb273cdc"
-		},
-		{
 			"backtrace" : 5,
 			"id" : "__idf_protobuf-c::@b14513c4bd859268ec22"
 		},
 		{
-			"backtrace" : 8,
-			"id" : "__idf_json::@c78a8bdc820334f01148"
+			"backtrace" : 7,
+			"id" : "__idf_mdns::@2f076c6da9dadb273cdc"
 		}
 	],
-	"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098",
-	"name" : "__idf_wifi_provisioning",
-	"nameOnDisk" : "libwifi_provisioning.a",
+	"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef",
+	"name" : "__idf_esp_local_ctrl",
+	"nameOnDisk" : "libesp_local_ctrl.a",
 	"paths" : 
 	{
-		"build" : "esp-idf/wifi_provisioning",
-		"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning"
+		"build" : "esp-idf/esp_local_ctrl",
+		"source" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_local_ctrl"
 	},
 	"sourceGroups" : 
 	[
@@ -544,13 +554,7 @@
 			[
 				0,
 				1,
-				2,
-				3,
-				4,
-				5,
-				6,
-				7,
-				8
+				2
 			]
 		}
 	],
@@ -559,55 +563,19 @@
 		{
 			"backtrace" : 2,
 			"compileGroupIndex" : 0,
-			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/src/wifi_config.c",
+			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_local_ctrl/src/esp_local_ctrl.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 2,
 			"compileGroupIndex" : 0,
-			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/src/wifi_scan.c",
+			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_local_ctrl/src/esp_local_ctrl_handler.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 2,
 			"compileGroupIndex" : 0,
-			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/src/manager.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 2,
-			"compileGroupIndex" : 0,
-			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/src/handlers.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 2,
-			"compileGroupIndex" : 0,
-			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/src/scheme_softap.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 2,
-			"compileGroupIndex" : 0,
-			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/src/scheme_console.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 2,
-			"compileGroupIndex" : 0,
-			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/proto-c/wifi_config.pb-c.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 2,
-			"compileGroupIndex" : 0,
-			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/proto-c/wifi_scan.pb-c.c",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 2,
-			"compileGroupIndex" : 0,
-			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/wifi_provisioning/proto-c/wifi_constants.pb-c.c",
+			"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/components/esp_local_ctrl/proto-c/esp_local_ctrl.pb-c.c",
 			"sourceGroupIndex" : 0
 		}
 	],
