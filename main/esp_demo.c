@@ -148,18 +148,17 @@ static void IRAM_ATTR vFlow_ISR_Handler(void* arg)
 /**
  * @brief Flow Rate Task to Read From GR-4028
  *        Writes to xFlow_Queue every 60 seconds
- * Flow_Rate = (Pulse Frequency x 60) / 38 (Flow Rate in liters per hour)
+ * Flow_Rate = (Pulse Frequency) / 38 (Flow Rate in liters per minute)
  */
 static void vFlow_Rate_Task(void *pvParameter)
 {
     uint32_t flow_rate = 0;
     for (;;){
-    flow_samples = 0;
-        //vTaskDelay(pdMS_TO_TICKS(60000));
-    flow_rate = (flow_samples / 38 * 60) + 6; 
+    flow_rate = (flow_samples / 38)  ; 
     vUpdateQueue(xFlow_Queue, flow_rate);
     printf("Flow Rate = %d\n", flow_rate);
-    vTaskDelay(pdMS_TO_TICKS(10000));
+    flow_samples = 0;
+    vTaskDelay(pdMS_TO_TICKS(60000));
     }
 }
 
@@ -449,7 +448,7 @@ static void lcd1602_display()
 
     i2c_lcd1602_write_string(lcd_info, "Temp (C):");
     i2c_lcd1602_move_cursor(lcd_info, 0, 1);
-    i2c_lcd1602_write_string(lcd_info, "Flow Rate(L/M):");
+    i2c_lcd1602_write_string(lcd_info, "Flow(L/M):");
     char temp_read[50];
     xSense_t pxData = {
         .ulValue = 0,
@@ -589,8 +588,6 @@ void app_main(void)
     xFlow_Queue = vQueueInit();
     initialise_wifi();
     vInit_Flow();
-    // lcd1602_display();
-    // xTaskCreate(&lcd1602_task, "lcd1602_task", 4096, NULL, 5, NULL);
     xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",
                             600,

@@ -3,5 +3,4 @@ source "C:/Users/Dmitr/Desktop/esp-idf-2/components/bootloader/Kconfig.projbuild
 source "C:/Users/Dmitr/Desktop/esp-idf-2/components/esptool_py/Kconfig.projbuild"
 source "C:/Users/Dmitr/Desktop/esp-idf-2/components/partition_table/Kconfig.projbuild"
 source "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/components/L298N/Kconfig.projBuild"
-source "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/components/LCDInterface/Kconfig.projBuild"
 source "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/main/Kconfig.projbuild"

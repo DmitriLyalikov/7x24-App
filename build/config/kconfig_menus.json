@@ -1839,45 +1839,6 @@
                 ],
                 "title": "Servo Enable GPIO",
                 "type": "int"
-            },
-            {
-                "children": [],
-                "depends_on": null,
-                "help": "GPIO number (IOxx)",
-                "id": "SERVO1_IN1_GPIO",
-                "name": "SERVO1_IN1_GPIO",
-                "range": [
-                    0,
-                    34
-                ],
-                "title": "Servo GPIO 1",
-                "type": "int"
-            },
-            {
-                "children": [],
-                "depends_on": null,
-                "help": null,
-                "id": "SERVO1_IN2_GPIO",
-                "name": "SERVO1_IN2_GPIO",
-                "range": [
-                    0,
-                    34
-                ],
-                "title": "Servo GPIO 2",
-                "type": "int"
-            },
-            {
-                "children": [],
-                "depends_on": null,
-                "help": null,
-                "id": "SERVO1_ENABLE_GPIO",
-                "name": "SERVO1_ENABLE_GPIO",
-                "range": [
-                    0,
-                    34
-                ],
-                "title": "Servo Enable GPIO",
-                "type": "int"
             }
         ],
         "depends_on": null,

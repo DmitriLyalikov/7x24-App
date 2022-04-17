@@ -608,10 +608,6 @@
 				},
 				{
 					"backtrace" : 0,
-					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/components/LCDInterface/include"
-				},
-				{
-					"backtrace" : 0,
 					"path" : "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/components/esp32-smbus/include"
 				},
 				{
@@ -634,11 +630,11 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_cbor::@54bec30243cbf65f6214"
+			"id" : "__idf_asio::@db1a8833e22596808d70"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_asio::@db1a8833e22596808d70"
+			"id" : "__idf_cbor::@54bec30243cbf65f6214"
 		},
 		{
 			"backtrace" : 0,
@@ -658,19 +654,7 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_mdns::@2f076c6da9dadb273cdc"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_expat::@af4f74c6fac3f93a3341"
+			"id" : "__idf_esp_adc_cal::@dc736dc1d836ef36c9a5"
 		},
 		{
 			"backtrace" : 0,
@@ -678,43 +662,15 @@
 		},
 		{
 			"backtrace" : 0,
+			"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_expat::@af4f74c6fac3f93a3341"
+		},
+		{
+			"backtrace" : 0,
 			"id" : "__idf_wear_levelling::@cb21b0d7c0815cff11c6"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_esp_adc_cal::@dc736dc1d836ef36c9a5"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_esp_hid::@15df40e16a5d8775dd9b"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_protobuf-c::@b14513c4bd859268ec22"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_L298N::@052a6d0155b2f7b95541"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_LCDInterface::@191a37bab1ef2a67e3e0"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_esp32-i2c-lcd1602::@059ac46500ce06866256"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_esp32-smbus::@063725e9ff6f0766ee93"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_jsmn::@88dec008f06e3af609d0"
 		},
 		{
 			"backtrace" : 0,
@@ -726,11 +682,43 @@
 		},
 		{
 			"backtrace" : 0,
+			"id" : "__idf_esp_hid::@15df40e16a5d8775dd9b"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_mdns::@2f076c6da9dadb273cdc"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_protobuf-c::@b14513c4bd859268ec22"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_L298N::@052a6d0155b2f7b95541"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_esp32-smbus::@063725e9ff6f0766ee93"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_esp32-i2c-lcd1602::@059ac46500ce06866256"
+		},
+		{
+			"backtrace" : 0,
 			"id" : "__idf_json::@c78a8bdc820334f01148"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_spiffs::@df881b71474064c86689"
+			"id" : "__idf_jsmn::@88dec008f06e3af609d0"
 		},
 		{
 			"backtrace" : 0,
@@ -743,6 +731,10 @@
 		{
 			"backtrace" : 0,
 			"id" : "__idf_mqtt::@c1ab2c6a99226d1f4b56"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_spiffs::@df881b71474064c86689"
 		}
 	],
 	"id" : "__idf_main::@7368607ed66887415643",
