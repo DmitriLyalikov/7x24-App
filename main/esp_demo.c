@@ -87,7 +87,7 @@
 
 static const float kp = 2;       //Integral Ratio
 static const float ki = 5;       // Differential ratio 1
-static const float kd = 1;      // Sum of errors
+static const float kd = 1;       // Sum of errors
 static volatile float sum = 0;
 static volatile float old_error = 0;
 

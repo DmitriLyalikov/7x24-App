@@ -23,9 +23,6 @@
 static const gpio_num_t SERVO0_IN1_GPIO = CONFIG_SERVO0_IN1_GPIO;
 static const gpio_num_t SERVO0_IN2_GPIO = CONFIG_SERVO0_IN2_GPIO;
 static const gpio_num_t SERVO0_ENABLE_GPIO = CONFIG_SERVO0_ENABLE_GPIO;
-static const gpio_num_t SERVO1_IN1_GPIO = CONFIG_SERVO1_IN1_GPIO;
-static const gpio_num_t SERVO1_IN2_GPIO = CONFIG_SERVO1_IN2_GPIO;
-static const gpio_num_t SERVO1_ENABLE_GPIO = CONFIG_SERVO1_ENABLE_GPIO;
 
 /**
  * @brief 
@@ -45,15 +42,6 @@ esp_err_t L298N_init(void)
     mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM0A, SERVO0_ENABLE_GPIO);
     printf("Set Pin %d to PWM OUTPUT\n", SERVO0_ENABLE_GPIO);
 
-    gpio_set_direction(SERVO1_IN1_GPIO, GPIO_MODE_OUTPUT);
-    gpio_set_level(SERVO1_IN1_GPIO, 1);
-    printf("Set Pin %d to High\n", SERVO1_IN1_GPIO);
-    gpio_set_direction(SERVO1_IN2_GPIO, GPIO_MODE_OUTPUT);
-    gpio_set_level(SERVO1_IN2_GPIO, 0);
-    printf("Set Pin %d to Low\n", SERVO1_IN2_GPIO);
-
-    mcpwm_gpio_init(MCPWM_UNIT_0, MCPWM0A, SERVO1_ENABLE_GPIO);
-    printf("Set Pin %d to PWM OUTPUT\n", SERVO1_ENABLE_GPIO);
 
     mcpwm_config_t pwm_config = {
         .frequency     = 30000,
