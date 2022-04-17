@@ -28,13 +28,13 @@ menu "esp32-i2c-lcd1602 Configuration"
         help
             I2C address for HD44780-compatible LCD1602 device.
 
-    config EXAMPLE_WIFI_SSID
+    config WIFI_SSID
         string "WiFi SSID"
         default "JasperNet"
         help
             SSID (network name) for the example to connect to.
 
-    config EXAMPLE_VALIDATE_SERVER_CERT
+    config VALIDATE_SERVER_CERT
         bool "Validate server"
         default y
         help
@@ -42,37 +42,37 @@ menu "esp32-i2c-lcd1602 Configuration"
 
     choice
         prompt "EAP method for the example to use"
-        default EXAMPLE_EAP_METHOD_PEAP
-        config EXAMPLE_EAP_METHOD_TLS
+        default EAP_METHOD_PEAP
+        config EAP_METHOD_TLS
             bool "TLS"
-        config EXAMPLE_EAP_METHOD_PEAP
+        config EAP_METHOD_PEAP
             bool "PEAP"
-        config EXAMPLE_EAP_METHOD_TTLS
+        config EAP_METHOD_TTLS
             bool "TTLS"
     endchoice
 
-    config EXAMPLE_EAP_METHOD
+    config _EAP_METHOD
         int
-        default 0 if EXAMPLE_EAP_METHOD_TLS
-        default 1 if EXAMPLE_EAP_METHOD_PEAP
-        default 2 if EXAMPLE_EAP_METHOD_TTLS
+        default 0 if EAP_METHOD_TLS
+        default 1 if EAP_METHOD_PEAP
+        default 2 if EAP_METHOD_TTLS
 
-    config EXAMPLE_EAP_ID
+    config EAP_ID
         string "EAP ID"
         default "dlyalikov01@manhattan.edu"
         help
             Identity in phase 1 of EAP procedure.
 
-    config EXAMPLE_EAP_USERNAME
+    config EAP_USERNAME
         string "EAP USERNAME"
-        depends on EXAMPLE_EAP_METHOD_PEAP || EXAMPLE_EAP_METHOD_TTLS
+        depends on EAP_METHOD_PEAP || EAP_METHOD_TTLS
         default "Dlyalikov01"
         help
             Username for EAP method (PEAP and TTLS).
 
-    config EXAMPLE_EAP_PASSWORD
+    config EAP_PASSWORD
         string "EAP PASSWORD"
-        depends on EXAMPLE_EAP_METHOD_PEAP || EXAMPLE_EAP_METHOD_TTLS
+        depends on EAP_METHOD_PEAP || EAP_METHOD_TTLS
         default "Mchp4ung!!"
         help
             Password for EAP method (PEAP and TTLS).
