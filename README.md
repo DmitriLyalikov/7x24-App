@@ -1,7 +1,8 @@
 
 # 7x24 ESP32 Application Code
 
-This application controls heating element temperature with a PID control
+This application controls the temperature of target submerged in dielectric fluid with a PID algorithm given feedback from an LM35 temperature sensor.
+The PID output is a PWM signal to water pump to increase/decrease flow rate consequentially controlling heat transfer process. Temperature, Flow rate and other process data are shared via LCD display and AWS IoT dashboard via MQTT over WiFi conection. 
 
 ## Author
 Dmitri Lyalikov
@@ -13,14 +14,18 @@ L298N DC-DC Motor Driver.
 
 LM35 Analog Temperature Sensor.
 
+GR 1/4 Flow Sensor
+
+LCD1602 
+
 ## ESP32 Pin Topology
 *     -GPIO34 <-> LM35 Vout
 *     -GPIO32 <-> L298N IN1_0
 *     -GPIO33 <-> L298N IN2_0
 *     -GPIO25 <-> L298N EN1_0
-*     -GPIO27 <-> L298N IN1_1
-*     -GPIO14 <-> L298N IN2_1
-*     -GPIO12 <-> L298N EN1_1
+*     -GPIO21 <-> GR 1/4 Flow Sensor VO
+*     -GPIO19 <-> LCD1602 SCL
+*     -GPIO18 <-> LCD1602 SDA
 
 ## Projects contents
 
@@ -34,11 +39,10 @@ Below is short explanation of remaining files in the project folder.
 ├── CMakeLists.txt
 ├── components
     ├──L298N
-       ├── include
-           ├── L298N.h
-       ├── L298N.c
-       ├── component.mk 
-       ├── CMakeLists.txt   
+    ├──esp32-i2c-lcd1602
+    ├──awsiot
+    ├──esp32-smbus
+      
 ├── main
 │   ├── CMakeLists.txt
 │   ├── component.mk           Component make file
