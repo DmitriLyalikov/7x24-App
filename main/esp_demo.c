@@ -204,7 +204,7 @@ void vInit_Flow(void)
     gpio_isr_handler_add(FLOW_RATE_PIN, vFlow_ISR_Handler, (void*) FLOW_RATE_PIN);
 }
 
-/*
+
 void disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data)
 {
     IOT_WARN("MQTT Disconnect");
@@ -231,7 +231,7 @@ void disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data)
     }
 }
 
-*/
+
 static void event_handler(void* arg, esp_event_base_t event_base,
                                 int32_t event_id, void* event_data)
 {
@@ -341,7 +341,7 @@ static void initialise_wifi(void)
     ESP_ERROR_CHECK(esp_event_handler_instance_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, instance_any_id));
     vEventGroupDelete(s_wifi_event_group);
 }
-/**
+
 static void record_temp_task(void *pvParameters)
 {
     xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT, false, true, portMAX_DELAY);
@@ -453,7 +453,7 @@ static void record_temp_task(void *pvParameters)
     IOT_ERROR("Escaped loop...\n");
     abort();
 }
-*/
+
 
 /**
  * @brief Initialize I2C Master bus for LCD1602 Display
