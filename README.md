@@ -4,6 +4,8 @@
 This application controls the temperature of target submerged in dielectric fluid with a PID algorithm given feedback from an LM35 temperature sensor.
 The PID output is a PWM signal to water pump to increase/decrease flow rate consequentially controlling heat transfer process. Temperature, Flow rate and other process data are shared via LCD display and AWS IoT dashboard via MQTT over WiFi conection. 
 
+The project presentation can be found at: https://www.youtube.com/watch?v=ilWbGFTbL-w
+
 ## Author
 Dmitri Lyalikov
 
