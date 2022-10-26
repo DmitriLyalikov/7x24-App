@@ -30,9 +30,9 @@ idf.py build
 ```
 
 * To flash and access serial output at runtime: 
-'''console
+```console
 idf.py flash monitor {COMxxx}
-'''
+```
 
 ## ESP32 Pin Connections
 *     -GPIO34 <-> LM35 Vout
