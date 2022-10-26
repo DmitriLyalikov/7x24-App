@@ -34,7 +34,12 @@ idf.py build
 idf.py flash monitor {COMxxx}
 ```
 
-## ESP32 Pin Connections
+## ESP32 Default Pin Connections
+The default pin connections can be found and reconfigured in the /main/KConfig.ProjBuild or using 
+```console
+idf.py menuconfig
+```
+
 *     -GPIO34 <-> LM35 Vout
 *     -GPIO32 <-> L298N IN1_0
 *     -GPIO33 <-> L298N IN2_0
@@ -56,12 +61,12 @@ Below is short explanation of remaining files in the project folder.
 ├── components
     ├──L298N
     ├──esp32-i2c-lcd1602
-    ├──awsiot
     ├──esp32-smbus
       
 ├── main
 │   ├── CMakeLists.txt
-│   ├── component.mk           Component make file
+│   ├── component.mk    
+│   |──Kconfigu.Projbuild
 │   └── esp-demo.c
 ├── Makefile                   Makefile used by legacy GNU Make
 └── README.md                  This is the file you are currently reading
