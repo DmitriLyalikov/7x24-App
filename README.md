@@ -22,12 +22,12 @@ LCD1602 Liquid Crystal Display
 * Download and Install the ESP-IDF toolchain: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/
 * After installing, open the ESP-IDF terminal application and navigate to /projects directory
 * Clone this repository using 
-'''console
-git clone 
-cd 
+```console
+git clone https://github.com/DmitriLyalikov/7x24-App.git
+cd 7x24-App
 idf.py configure
 idf.py build
-'''
+```
 
 * To flash and access serial output at runtime: 
 '''console
