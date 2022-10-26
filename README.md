@@ -16,9 +16,25 @@ LM35 Analog Temperature Sensor.
 
 GR 1/4 Flow Sensor
 
-LCD1602 
+LCD1602 Liquid Crystal Display
 
-## ESP32 Pin Topology
+## Using this Project
+* Download and Install the ESP-IDF toolchain: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/
+* After installing, open the ESP-IDF terminal application and navigate to /projects directory
+* Clone this repository using 
+'''console
+git clone 
+cd 
+idf.py configure
+idf.py build
+'''
+
+* To flash and access serial output at runtime: 
+'''console
+idf.py flash monitor {COMxxx}
+'''
+
+## ESP32 Pin Connections
 *     -GPIO34 <-> LM35 Vout
 *     -GPIO32 <-> L298N IN1_0
 *     -GPIO33 <-> L298N IN2_0
