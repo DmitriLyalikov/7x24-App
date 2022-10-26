@@ -2,9 +2,15 @@
  * @file    esp_demo.c
  * @author  Dmitri Lyalikov
  * @brief   7x24 Application Source for ESP32 
- * @version 0.1
- * @date    2022-03-07
+ * @version 1.1
+ * @date    2022-10-26
  * @copyright Copyright (c) 2022
+ * 
+ * Entry Point and Application, App_Main():
+ *     Configures Hardware, ADC, L298N modules via init() functions
+ *     Creates Resource sharing mechanisms (xSenseQueue, xFlowQueue) and Mutex
+ *     Assign tasks to Cores, Networking performed on Core 0, 
+ *     Hardware interfacing and Control tasks on Core 1
  * 
  *     ESP32 PIN TOPOLOGY
  *     -GPIO34 <-> LM35 Vout
@@ -49,11 +55,7 @@
 #include "smbus.h"
 #include "i2c-lcd1602.h"
 
-// #include "certs.h"
-//#include "aws_iot_config.h"
-//#include "aws_iot_log.h"
-//#include "aws_iot_version.h"
-//#include "aws_iot_mqtt_client_interface.h"
+
 
 // LCD1602
 #define LCD_NUM_ROWS               2
@@ -78,19 +80,6 @@
 
 #define WIFI_CONNECTED_BIT BIT0
 #define WIFI_FAIL_BIT      BIT1
-
-static esp_netif_t *sta_netif = NULL;
-#ifdef CONFIG_VALIDATE_SERVER_CERT
-extern uint8_t ca_pem_start[] asm("_binary_wpa2_ca_pem_start");
-extern uint8_t ca_pem_end[]   asm("_binary_wpa2_ca_pem_end");
-#endif /* CONFIG_EXAMPLE_VALIDATE_SERVER_CERT */
-
-#ifdef CONFIG_EAP_METHOD_TLS
-extern uint8_t client_crt_start[] asm("_binary_wpa2_client_crt_start");
-extern uint8_t client_crt_end[]   asm("_binary_wpa2_client_crt_end");
-extern uint8_t client_key_start[] asm("_binary_wpa2_client_key_start");
-extern uint8_t client_key_end[]   asm("_binary_wpa2_client_key_end");
-#endif /* CONFIG_EXAMPLE_EAP_METHOD_TLS */
 
 #define FLOW_RATE_PIN  GPIO_NUM_21
 
@@ -126,6 +115,7 @@ typedef struct xSense_t
     uint16_t ulValue;
 }xSense_t;
 
+// Global resource queue handles 
 QueueHandle_t xSense_Queue, xFlow_Queue, xgpio_evt;
 
 /**
@@ -170,10 +160,11 @@ static void vFlow_Rate_Task(void *pvParameter)
 {
     uint32_t flow_rate = 0;
     for (;;){
-    flow_rate = (flow_samples / 38) / 10  ; 
+    flow_rate = ((flow_samples / 38) / 10 ) + 4 ; 
     vUpdateQueue(xFlow_Queue, flow_rate);
-    printf("Flow Rate = %d\n", flow_rate);
+    printf("Flow Rate = %d mL/s\n", flow_rate);
     flow_samples = 0;
+    printf("got here\n");
     vTaskDelay(pdMS_TO_TICKS(60000));
     }
 }
@@ -195,263 +186,13 @@ void vInit_Flow(void)
     
     xTaskCreatePinnedToCore(vFlow_Rate_Task,
                             "FLOW_SENSE",
-                            1000,
+                            2000,
                             NULL,
                             1,
                             NULL,
                             1); 
     gpio_install_isr_service(0);
     gpio_isr_handler_add(FLOW_RATE_PIN, vFlow_ISR_Handler, (void*) FLOW_RATE_PIN);
-}
-
-
-void disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data)
-{
-    IOT_WARN("MQTT Disconnect");
-    IoT_Error_t rc = FAILURE;
-  
-    if(pCLient == NULL){
-	return;
-    }
-    
-    IOT_UNUSED(data);
-  
-    if(aws_iot_is_autoreconnect_enabled(pClient){
-	IOT_INFO("Auto Reconnect is enabled, reconnecting attempt will start now");
-    }
-    else {
-	IOT_WARN("Auto reconnect not enabled, Starting manual reconnect...");
-    	rc = aws_iot_mqtt_attempt_reconnect(pClient);
-	if(NETWORK_RECONNECTED ==rc) {
-	    IOT_WARN("Manual reconnect successful");
-	}
-	else {
-	    IOT_WARN("Manual reconnect failed - %d", rc);
-	}
-    }
-}
-
-
-static void event_handler(void* arg, esp_event_base_t event_base,
-                                int32_t event_id, void* event_data)
-{
-    if(event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START){
-        esp_wifi_connect();
-        printf("Connecting to WIFI\n");
-    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
-        if (s_retry_num < ESP_MAXIMUM_RETRY) {
-            esp_wifi_connect();
-            s_retry_num++;
-        } else {
-            xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
-        } 
-    }  else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
-        ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
-        printf("got ip:" IPSTR, IP2STR(&event->ip_info.ip));
-        s_retry_num = 0;
-        xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
-    }
-}
-
-/**
- * @brief Initialise wifi station and event loop
- */
-static void initialise_wifi(void)
-{
-    #ifdef CONFIG_VALIDATE_SERVER_CERT
-    unsigned int ca_pem_bytes = ca_pem_end - ca_pem_start;
-    #endif /* CONFIG_VALIDATE_SERVER_CERT */
-
-#ifdef CONFIG_EAP_METHOD_TLS
-    unsigned int client_crt_bytes = client_crt_end - client_crt_start;
-    unsigned int client_key_bytes = client_key_end - client_key_start;
-#endif /* CONFIG_EAP_METHOD_TLS */
-
-    s_wifi_event_group = xEventGroupCreate();
-
-    ESP_ERROR_CHECK(esp_netif_init());
-
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
-    esp_netif_create_default_wifi_sta();
-    // assert(sta_netif);
-
-    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
-    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
-
-    esp_event_handler_instance_t instance_any_id;
-    esp_event_handler_instance_t instance_got_ip;
-    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
-                                                ESP_EVENT_ANY_ID,
-                                                &event_handler,
-                                                NULL,
-                                                &instance_any_id));
-    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
-                                                        IP_EVENT_STA_GOT_IP,
-                                                        &event_handler,
-                                                        NULL,
-                                                        &instance_got_ip));
-    wifi_config_t wifi_config = {
-        .sta = {
-            .ssid = WIFI_SSID,
-        },
-    };
-    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
-    ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
-    ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_identity((uint8_t *)EAP_ID, strlen(EAP_ID)));
-
-#ifdef CONFIG_VALIDATE_SERVER_CERT
-    ESP_ERROR_CHECK( esp_wifi_sta_wpa2_ent_set_ca_cert(ca_pem_start, ca_pem_bytes) );
-#endif /* CONFIG_VALIDATE_SERVER_CERT */
-
-#ifdef CONFIG_EAP_METHOD_TLS
-    ESP_ERROR_CHECK( esp_wifi_sta_wpa2_ent_set_cert_key(client_crt_start, client_crt_bytes,\
-    		client_key_start, client_key_bytes, NULL, 0) );
-#endif /* CONFIG_EAP_METHOD_TLS */
-
-#if defined CONFIG_EAP_METHOD_PEAP || CONFIG_EAP_METHOD_TTLS
-    ESP_ERROR_CHECK( esp_wifi_sta_wpa2_ent_set_username((uint8_t *)EAP_USERNAME, strlen(EAP_USERNAME)) );
-    ESP_ERROR_CHECK( esp_wifi_sta_wpa2_ent_set_password((uint8_t *)EAP_PASSWORD, strlen(EAP_PASSWORD)) );
-#endif /* CONFIG_EAP_METHOD_PEAP || CONFIG_EAP_METHOD_TTLS */
-    ESP_ERROR_CHECK( esp_wifi_sta_wpa2_ent_enable() );
-    ESP_ERROR_CHECK(esp_wifi_start());
-    fprintf(stderr, "Setting Wifi Configuration SSID %s...\n", wifi_config.sta.ssid);
-
-    /* Waiting until either the connection is established (WIFI_CONNECTED_BIT) or connection failed for the maximum
-     * number of re-tries (WIFI_FAIL_BIT). The bits are set by event_handler() (see above) */
-    EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
-            WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
-            pdFALSE,
-            pdFALSE,
-            portMAX_DELAY);
-
-    /* xEventGroupWaitBits() returns the bits before the call returned, hence we can test which event actually
-     * happened. */
-    if (bits & WIFI_CONNECTED_BIT) {
-        printf("connected to ap SSID:%s\n",
-                 WIFI_SSID);
-    } else if (bits & WIFI_FAIL_BIT) {
-        printf("Failed to connect to SSID: %s\n",
-                 WIFI_SSID);
-    } else {
-        printf("UNEXPECTED EVENT\n");
-    }
-
-    /* The event will not be processed after unregister */
-    ESP_ERROR_CHECK(esp_event_handler_instance_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, instance_got_ip));
-    ESP_ERROR_CHECK(esp_event_handler_instance_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, instance_any_id));
-    vEventGroupDelete(s_wifi_event_group);
-}
-
-static void record_temp_task(void *pvParameters)
-{
-    xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT, false, true, portMAX_DELAY);
-    fprintf(stderr, "Connected to AP\n");
-
-    IoT_Client_Init_Params mqttInitParams = iotClientInitParamsdefault;
-
-    IOT_INFO("\nAWS IoT SDK Version %d.%d.%d-%d \n", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH, VERSION_TAG);
-    
-    mqttInitParams.enableAutoReconnect = false; // Enable this later
-    mqttInitParams.pHostURL = AWS_IOT_MQTT_HOST;
-    mqttInitParms.port = AWS_IOT_MQTT_PORT;
-    mqttInitParams.pRootCALocation = "";
-    mqttInitParams.pDeviceCertLocation = "";
-    mqttInitParams.pDevicePrivateKeyLocation = "";
-    mqttInitParams.mqttCommandTimeout_ms = 20000;
-    mqttInitParams.tlsHandshakeTimeout_ms = 20000;
-    mqttInitParams.isSSLHostnameVerify = true;
-    mqttInitParams.disconnectHandler = disconnectCallbackHandler;
-    mqttInitParams.disconnectedHandlerData = NULL;
-   
-    IoT_Error_t rc = FAILURE;
-    AWS_IoT_Client client;
-    rc = aws_iot_mqtt_init(&client &mqttInitParams);
-    if(SUCCESS != rc) {
-	IOT_ERROR("aws_iot_mqtt_init returned error : %d ", rc);
-      abort();
-    }
-  
-    IoT_Client_Connect_Params = connectParams = iotClientConnectParamsDefault;
-    connectParams.keepAliveIntervalInSec = 10;
-    connectParams.isCleanSession = true;
-    connectParams.MQTTVersion = MQTT_3_1_1;
-    connectParams.pClientID = AWS_IOT_MQTT_CLIENT_ID;
-    connectParams.clientIDLen = (uint16_t)strlen(AWS_IOT_MQTT_CLIENT_ID);
-    connectParams.isWillMsgPresent = false;
-
-    IOT_INFO("Connecting...");
-    rc = aws_iot_mqtt_connect(&client, &connectParams);
-    if(SUCCESS != rc){
-        IOT_ERROR("(%d) connecting to %s:%d", rc, mqttInitParams.pHostURL, mqttInitParams.port);
-        abort();
-    }
-    
-    rc = aws_iot_mqtt_autoreconnect_set_status(&client, true);
-    if(SUCCESS != rc) {
-	IOT_ERROR("Unable to set Auto Reconnect to true - %d", rc);
-      abort();
-    }
-    
-    const char *topicName = "sdkTest/sub";
-   
-    char cPayload[100];
-    uint32_t payloadCount = 0;
-    sprintf(cPayload, "%s : %d ", " hello from SDK", payloadCount);
-    
-    IoT_Publish_Message_Params paramsQOS0;
-    paramsQOS0.qos = QOS0;
-    paramsQOS0.payload = (void *) cPayload;
-    paramsQOS0.isRetained = 0;
-
-    Timer sendit;
-    countdown_ms(&sendit, 1500);
-    
-    uint32_t reconnectAttempts = 0;
-    uint32_t reconnectedCount = 0;
-  
-    while((NETWORK_ATTEMPTING_RECONNECT == rc || NETWORK_RECONNECTED == rc || SUCCESS == rc )) {
-        IOT_DEBUG("Top of loop: payloadCount=%d, reconnectAttempt=%d, reconnectedCount=%d\n", payloadCount, reconnectAttempts, reconnectedCount);
-
-	  // Max time the yield functioin will wait for messages
-        rc = aws_iot_mqtt_yield(&client, 1000);
-  	  if(NETWORK_ATTEMPTING_RECONNECT == rc) {
-	    reconnectAttempts++;
-	    IOT_DEBUG("Reconnecting...\n");
-          // if the client is attempting to reconnect we will skip the rest of the loop
-	    continue;
-         }
- 
-   	if(NETWORK_RECONNECTED == rc) {
-          reconnectedCount++;
-	    IOT_DEBUG(stderr, "Reconnected...\n");
-      }
-    
-      if(!has_timer_expired(&sendit)) {
-	    IOT_INFO("--> sleeping it off");
-	    vTaskDelay(1000/ portTICK_PERIOD_MS);
-   	    continue;
-      }
-  
-      sprintf(cPayload, "%s : %d ", "hello from SDK QOS0", payloadCount++);
-      params.QOS0.payloadLen = strlen(cPayload);
-      rc = aws_iot_mqtt_publish(&client, topicName, strlen(topicName), &paramsQOS0);
-      if (rc == MQTT_REQUEST_TIMEOUT_ERROR) {
-	    IOT_DEBUG("QOS0 publish ack not received.\n");
-	    rc = SUCCESS;
-	}
-    
-    if(SUCCESS != rc ) {
-	IOT_ERROR("An error occurred in the loop.\n");
-     }
-    else {
-	IOT_INFO("Publish Done\n");
-    }
-   
-    countdown_ms(&sendit, 15000);
-    }
- 
-    IOT_ERROR("Escaped loop...\n");
-    abort();
 }
 
 
@@ -494,7 +235,7 @@ static void lcd1602_display()
     ESP_ERROR_CHECK(smbus_set_timeout(smbus_info, 1000 / portTICK_RATE_MS));
 
     // Init LCD1602 device 
-        i2c_lcd1602_info_t * lcd_info = i2c_lcd1602_malloc();
+    i2c_lcd1602_info_t * lcd_info = i2c_lcd1602_malloc();
     ESP_ERROR_CHECK(i2c_lcd1602_init(lcd_info, smbus_info, true,
                                      LCD_NUM_ROWS, LCD_NUM_COLUMNS, LCD_NUM_VISIBLE_COLUMNS));
     ESP_ERROR_CHECK(i2c_lcd1602_reset(lcd_info));
@@ -562,7 +303,7 @@ static void Temp_Sense()
         temp = (esp_adc_cal_raw_to_voltage(temp, adc_chars));
         sum  += temp * .1;
     }
-    temp = (sum / NO_OF_SAMPLES);
+    temp = (sum / NO_OF_SAMPLES) + 10;
     xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
     // Update xSense_Queue
     vUpdateQueue(xSense_Queue, temp); 
@@ -643,15 +384,17 @@ void app_main(void)
     xQueueMutex = xSemaphoreCreateMutex();
     xSense_Queue = vQueueInit();
     xFlow_Queue = vQueueInit();
-    initialise_wifi();
+    //initialise_wifi();
+    printf("Got here\n");
     vInit_Flow();
     xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",
-                            600,
+                            1000,
                             NULL,
                             1, 
                             NULL,
                             1);
+    printf("Got here\n");
     xTaskCreatePinnedToCore(&vPIDCompute,
                             "PID_Compute",
                             1750,
@@ -659,11 +402,12 @@ void app_main(void)
                             1,
                             NULL,
                             1); 
-    xTaskCreatePinnedToCore(&lcd1602_display,
+    printf("Got here\n");
+    /*xTaskCreatePinnedToCore(&lcd1602_display,
                             "LCD_Display",
-                            1750,
+                            3000,
                             NULL,
                             1,
                             NULL,
-                            1); 
+                            1);  */
 }
