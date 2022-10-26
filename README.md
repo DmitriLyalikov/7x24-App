@@ -20,6 +20,9 @@ GR 1/4 Flow Sensor
 
 LCD1602 Liquid Crystal Display
 
+<img width="903" alt="image" src="https://user-images.githubusercontent.com/68623356/198076812-36c3dcf1-d0e3-4465-bee2-6a430304924f.png">
+
+
 ## Using this Project
 * Download and Install the ESP-IDF toolchain: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/
 * After installing, open the ESP-IDF terminal application and navigate to /projects directory
