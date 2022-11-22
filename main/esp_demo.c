@@ -69,22 +69,6 @@
 #define I2C_MASTER_SDA_IO        CONFIG_I2C_MASTER_SDA
 #define I2C_MASTER_SCL_IO        CONFIG_I2C_MASTER_SCL
 
-#define WIFI_SSID "JasperNet"
-#define EAP_METHOD CONFIG_EAP_METHOD
-
-#define EAP_ID "Your_UPI/UserID"
-#define EAP_USERNAME "Your_UPI/UserID"
-#define EAP_PASSWORD "Password"
-
-#define ESP_MAXIMUM_RETRY 5
-
-#define WIFI_CONNECTED_BIT BIT0
-#define WIFI_FAIL_BIT      BIT1
-
-#define FLOW_RATE_PIN  GPIO_NUM_21
-
-#define DEFAULT_VREF 1500        // ADCout = (Vin, ADC*2^12)/Vref
-#define NO_OF_SAMPLES 20
 
 #define MIN_INTEGRAL 2.0         // Min integral value
 #define MAX_INTEGRAL 10.0        // Max Integral Value
@@ -99,7 +83,6 @@ static volatile float sum = 0;
 static volatile float old_error = 0;
 
 static float set_temp = 20;      // Desired Temperature of Target (Celsius)
-static volatile uint16_t flow_samples;
 
 static esp_adc_cal_characteristics_t *adc_chars;
 static const adc_channel_t channel = ADC_CHANNEL_6;   // GPIO34 
@@ -108,95 +91,11 @@ static const adc_atten_t atten = ADC_ATTEN_DB_11;
 static const adc_unit_t unit = ADC_UNIT_1;
 
 static SemaphoreHandle_t xQueueMutex;
-static EventGroupHandle_t s_wifi_event_group;
-static int s_retry_num = 0;
 
-typedef struct xSense_t
-{
-    TickType_t xTimeStamp;
-    uint16_t ulValue;
-}xSense_t;
+
 
 // Global resource queue handles 
 QueueHandle_t xSense_Queue, xFlow_Queue, xgpio_evt;
-
-/**
- * @brief Initialize Temperature and Flow Rate Sense Mailbox Queue
- */
-static QueueHandle_t vQueueInit(void)
-{   
-    return xQueueCreate(1, sizeof(xSense_t));
-}
-
-void vUpdateQueue(QueueHandle_t Queue, float ulNewValue)
-{
-    xSense_t xData;
-    xData.ulValue = ulNewValue;
-    xData.xTimeStamp = pdTICKS_TO_MS(xTaskGetTickCount());
-    // xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
-    xQueueOverwrite(Queue, &xData);
-    // xSemaphoreGive(xQueueMutex);
-}
-
-/**
- * @brief 
- *        Read Mailbox Queue
- * @param pxData Pointer to Struct of type xSense_t for contents to be copied
- * @param Queue  Pointer to struct of type xSense_T to be read from
- */
-static void vReadQueue(xSense_t *pxData, QueueHandle_t Queue)
-{
-    xQueuePeek(Queue, pxData, portMAX_DELAY);
-}
-
-static void IRAM_ATTR vFlow_ISR_Handler(void* arg)
-{
-    flow_samples++;
-}
-/**
- * @brief Flow Rate Task to Read From GR-4028
- *        Writes to xFlow_Queue every 60 seconds
- * Flow_Rate = (Pulse Frequency) / 38 (Flow Rate in liters per minute)
- */
-static void vFlow_Rate_Task(void *pvParameter)
-{
-    uint32_t flow_rate = 0;
-    for (;;){
-    flow_rate = ((flow_samples / 38) / 10 ) + 4 ;
-    flow_rate = 0; 
-    vUpdateQueue(xFlow_Queue, flow_rate);
-    printf("Flow Rate = %d mL/s\n", flow_rate);
-    flow_samples = 0;
-    printf("got here\n");
-    vTaskDelay(pdMS_TO_TICKS(60000));
-    }
-}
-
-/**
- * @brief Initialize GPIO 21 as Input for Flow Rate Sensor
- *        Config vFlowInterrupt_Handler as ISR to increment 
- *        flow_samples
- */
-void vInit_Flow(void)
-{
-    gpio_config_t gpioConfig;
-    gpioConfig.pin_bit_mask = GPIO_SEL_21;
-    gpioConfig.mode         = GPIO_MODE_INPUT;
-    gpioConfig.pull_up_en   = GPIO_PULLUP_ENABLE;
-    gpioConfig.pull_down_en = GPIO_PULLDOWN_ENABLE;
-    gpioConfig.intr_type    = GPIO_INTR_POSEDGE;
-    gpio_config(&gpioConfig);
-    
-    xTaskCreatePinnedToCore(vFlow_Rate_Task,
-                            "FLOW_SENSE",
-                            2000,
-                            NULL,
-                            1,
-                            NULL,
-                            1); 
-    gpio_install_isr_service(0);
-    gpio_isr_handler_add(FLOW_RATE_PIN, vFlow_ISR_Handler, (void*) FLOW_RATE_PIN);
-}
 
 
 /**
@@ -273,48 +172,7 @@ static void lcd1602_display()
     }
 }
 
-/**
-*@brief
-*  Config ADC (GPIO 34)
-*  Channel 6 Unit 1 
-*  (12 Bit Resolution, 0 Attenuation, 1V2 Reference)
-*/
-static esp_err_t ADC_init()
-{
-    adc1_config_channel_atten((adc1_channel_t)channel, atten);
-    adc_chars = calloc(1, sizeof(esp_adc_cal_characteristics_t));
-    esp_adc_cal_characterize(unit, atten, width, DEFAULT_VREF, adc_chars);
-    return ESP_OK;
-}   
 
-/**
-*@brief
-*  Read Temperature from LM35 Over ADC 
-*  LM35 Transfer Function: Vout = 10mV/C *T
-*  Where T is temperature in Celsius
-*  Task Repeats every 1000ms
-*  Take (NO_OF_SAMPLES) of reads and use average
-*  Update xSense_Queue mailbox temp
-*/
-static void Temp_Sense()
-{   
-    for(;;){
-    uint16_t temp, sum = 0;
-    for (uint8_t i = 0; i < NO_OF_SAMPLES; i++){
-        temp = (adc1_get_raw((adc1_channel_t)channel));    
-        temp = (esp_adc_cal_raw_to_voltage(temp, adc_chars));
-        sum  += temp * .1;
-    }
-    temp = (sum / NO_OF_SAMPLES);
-    ESP_LOGI(TAG, "Read: %d", temp);
-    
-    xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
-    // Update xSense_Queue
-    vUpdateQueue(xSense_Queue, temp); 
-    xSemaphoreGive(xQueueMutex);
-    vTaskDelay(pdMS_TO_TICKS(12000));
-    }
-}
 
 /**
 *@brief
