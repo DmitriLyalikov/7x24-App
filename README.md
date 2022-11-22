@@ -36,8 +36,8 @@ export.bat
 #### Configure and build this project
 ```console
 cd projects
-git clone https://github.com/DmitriLyalikov/ESP32_Smart_Clock.git
-cd ESP32_Smart_Clock
+git clone https://github.com/DmitriLyalikov/7x24-App.git
+cd 7x24-App
 idf.py fullclean
 idf.py set-target ESP32
 idf.py build
@@ -48,16 +48,16 @@ With the ESP32 connected via USB, connected to 'COMx'
 ```
 idf.py flash monitor 'COMx'
 ```
-This will flash the application onto the system, and restart, it will then provide serial access to the application. This is not needed to use the clock, but is useful to ensure it flashed successfully. 
+This will flash the application onto the system, and restart, it will then provide serial access to the application. This is now
 
 #### Configure Application settings
-Some configurations may need to be made when using this application. Wifi SSID, Password, and authentication mode must be set before using this app, or the defaults will be used. Generally each component will have a configuration manager that is defined in components/component/Kconfig.Projbuild . Instead of editing hard-coded values in each component source file, a menuconfig utility is provided that can edit these values via command utility:
+Some configurations may need to be made when using this application. Wifi SSID, Password, and authentication mode may/need be set before using this app, or the defaults will be used. Generally each component will have a configuration manager that is defined in components/component/Kconfig.Projbuild . Instead of editing hard-coded values in each component source file, a menuconfig utility is provided that can edit these values via command utility:
 ```console
 idf.py menuconfig
 ```
 
 ## ESP32 Default Pin Connections
-The default pin connections can be found and reconfigured in the /main/KConfig.ProjBuild or using 
+The default pin connections can be found and reconfigured or using 
 ```console
 idf.py menuconfig
 ```
@@ -86,14 +86,15 @@ All components that are hardware facing (drivers for a specfic device) are named
     ├──LM35                 Init and Task functions for the LM35 Temperature Sensor using ADC
     ├──GR2048               Init and Task functions for the GR-2048 Flow Rate Sensor
     ├──sys_resource         System resources for task management, queues, structs
+    ├──pid_controller       PID setup and computation task for control system with weights 
     ├──esp32-i2c-lcd1602    
     ├──esp32-smbus
       
 ├── main
 │   ├── CMakeLists.txt
 │   ├── component.mk    
-│   |──Kconfigu.Projbuild
-│   └── esp-demo.c
+│   |──Kconfig.Projbuild
+│   └── esp-demo.c         Entry point to application
 ├── Makefile                   Makefile used by legacy GNU Make
 └── README.md                  This is the file you are currently reading
 ```
