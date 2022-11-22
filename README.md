@@ -23,24 +23,41 @@ LCD1602 Liquid Crystal Display
 <img width="903" alt="image" src="https://user-images.githubusercontent.com/68623356/198076812-36c3dcf1-d0e3-4465-bee2-6a430304924f.png">
 
 
-## Using this Project
-* Download and Install the ESP-IDF toolchain: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/
-* After installing, open the ESP-IDF terminal application and navigate to /projects directory
-* Clone this repository using 
+### Using this Application
+This application is created in the esp-idf framework. The toolchain, compiler, drivers, all can be installed locally here: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/
+
+This application was developed on a Windows system, and the windows installer: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/windows-setup.html can be found here that automates the setup process. 
+Upon installation and following these steps, a ESP_IDF 4.x CMD utility will be installed, which is a development environment for esp-idf based projects. Open this. I used version 4.4, but a newer version may be available upon completion of this project.
+#### Configure ESP-IDF
 ```console
+install
+export.bat
+```
+#### Configure and build this project
+```console
+cd projects
 git clone https://github.com/DmitriLyalikov/7x24-App.git
 cd 7x24-App
-idf.py configure
+idf.py fullclean
+idf.py set-target ESP32
 idf.py build
 ```
 
-* To flash and access serial output at runtime: 
+#### Flashing and Running
+With the ESP32 connected via USB, connected to 'COMx'
+```
+idf.py flash monitor 'COMx'
+```
+This will flash the application onto the system, and restart, it will then provide serial access to the application. This is now
+
+#### Configure Application settings
+Some configurations may need to be made when using this application. Wifi SSID, Password, and authentication mode may/need be set before using this app, or the defaults will be used. Generally each component will have a configuration manager that is defined in components/component/Kconfig.Projbuild . Instead of editing hard-coded values in each component source file, a menuconfig utility is provided that can edit these values via command utility:
 ```console
-idf.py flash monitor {COMxxx}
+idf.py menuconfig
 ```
 
 ## ESP32 Default Pin Connections
-The default pin connections can be found and reconfigured in the /main/KConfig.ProjBuild or using 
+The default pin connections can be found and reconfigured or using 
 ```console
 idf.py menuconfig
 ```
@@ -60,19 +77,24 @@ The project **7x24-App** contains one source file in C language [esp_demo.c](mai
 ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt` files that provide set of directives and instructions describing the project's source files and targets (executable, library, or both). 
 
 Below is short explanation of remaining files in the project folder.
+All components that are hardware facing (drivers for a specfic device) are named after the device they interact with (ie: LM35)
 
 ```
 ├── CMakeLists.txt
 ├── components
-    ├──L298N
-    ├──esp32-i2c-lcd1602
+    ├──L298N                Init and control functions for the L298N motor controller using PWM
+    ├──LM35                 Init and Task functions for the LM35 Temperature Sensor using ADC
+    ├──GR2048               Init and Task functions for the GR-2048 Flow Rate Sensor
+    ├──sys_resource         System resources for task management, queues, structs
+    ├──pid_controller       PID setup and computation task for control system with weights 
+    ├──esp32-i2c-lcd1602    
     ├──esp32-smbus
       
 ├── main
 │   ├── CMakeLists.txt
 │   ├── component.mk    
-│   |──Kconfigu.Projbuild
-│   └── esp-demo.c
+│   |──Kconfig.Projbuild
+│   └── esp-demo.c         Entry point to application
 ├── Makefile                   Makefile used by legacy GNU Make
 └── README.md                  This is the file you are currently reading
 ```
