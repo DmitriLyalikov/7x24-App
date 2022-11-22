@@ -74,7 +74,7 @@
 
 #define EAP_ID "Your_UPI/UserID"
 #define EAP_USERNAME "Your_UPI/UserID"
-#define EAP_PASSWORD "Pasword"
+#define EAP_PASSWORD "Password"
 
 #define ESP_MAXIMUM_RETRY 5
 
@@ -89,6 +89,8 @@
 #define MIN_INTEGRAL 2.0         // Min integral value
 #define MAX_INTEGRAL 10.0        // Max Integral Value
 #define EPSILON      0.01
+
+static const char* TAG = "7x24 APP";
 
 static const float kp = 2;       //Integral Ratio
 static const float ki = 5;       // Differential ratio 1
@@ -160,7 +162,8 @@ static void vFlow_Rate_Task(void *pvParameter)
 {
     uint32_t flow_rate = 0;
     for (;;){
-    flow_rate = ((flow_samples / 38) / 10 ) + 4 ; 
+    flow_rate = ((flow_samples / 38) / 10 ) + 4 ;
+    flow_rate = 0; 
     vUpdateQueue(xFlow_Queue, flow_rate);
     printf("Flow Rate = %d mL/s\n", flow_rate);
     flow_samples = 0;
@@ -296,14 +299,15 @@ static esp_err_t ADC_init()
 static void Temp_Sense()
 {   
     for(;;){
-    // TickType_t xTimeNow = xTaskGetTickCount();
     uint16_t temp, sum = 0;
     for (uint8_t i = 0; i < NO_OF_SAMPLES; i++){
         temp = (adc1_get_raw((adc1_channel_t)channel));    
         temp = (esp_adc_cal_raw_to_voltage(temp, adc_chars));
         sum  += temp * .1;
     }
-    temp = (sum / NO_OF_SAMPLES) + 10;
+    temp = (sum / NO_OF_SAMPLES);
+    ESP_LOGI(TAG, "Read: %d", temp);
+    
     xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
     // Update xSense_Queue
     vUpdateQueue(xSense_Queue, temp); 
@@ -373,19 +377,18 @@ static void vPIDCompute(void *pvParameter)
 */ 
 void app_main(void)
 {   
-    printf("********ESP32 7x24 Application********\n");
+
     nvs_flash_init();
-    printf("***Temperature Set to %f Celsius***\n", set_temp);
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(ADC_init());
-    printf("***LM35 Module Initialized***\n");
+    ESP_LOGI(TAG, "ADC Init OK");
     ESP_ERROR_CHECK(L298N_init());
-    printf("***L298N PWM Module Initialized***\n");
+    ESP_LOGI(TAG, "L298N Motor Control Module Init OK");
+
     xQueueMutex = xSemaphoreCreateMutex();
     xSense_Queue = vQueueInit();
     xFlow_Queue = vQueueInit();
-    //initialise_wifi();
-    printf("Got here\n");
+
     vInit_Flow();
     xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",
@@ -394,7 +397,7 @@ void app_main(void)
                             1, 
                             NULL,
                             1);
-    printf("Got here\n");
+
     xTaskCreatePinnedToCore(&vPIDCompute,
                             "PID_Compute",
                             1750,
@@ -402,12 +405,12 @@ void app_main(void)
                             1,
                             NULL,
                             1); 
-    printf("Got here\n");
-    /*xTaskCreatePinnedToCore(&lcd1602_display,
+
+    xTaskCreatePinnedToCore(&lcd1602_display,
                             "LCD_Display",
                             3000,
                             NULL,
                             1,
                             NULL,
-                            1);  */
+                            1);  
 }

@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App
+# Install script for directory: C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -32,9 +32,14 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "TRUE")
 endif()
 
+# Set default install directory permissions.
+if(NOT DEFINED CMAKE_OBJDUMP)
+  set(CMAKE_OBJDUMP "C:/Users/Dmitr/.espressif/tools/xtensa-esp32-elf/esp-2021r2-patch3-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-objdump.exe")
+endif()
+
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/build/esp-idf/cmake_install.cmake")
+  include("C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/cmake_install.cmake")
 
 endif()
 
@@ -46,5 +51,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/Dmitr/Desktop/esp-idf-2/projects/esp_demo/7x24-App/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
