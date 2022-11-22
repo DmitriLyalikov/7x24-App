@@ -60,12 +60,16 @@ The project **7x24-App** contains one source file in C language [esp_demo.c](mai
 ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt` files that provide set of directives and instructions describing the project's source files and targets (executable, library, or both). 
 
 Below is short explanation of remaining files in the project folder.
+All components that are hardware facing (drivers for a specfic device) are named after the device they interact with (ie: LM35)
 
 ```
 ├── CMakeLists.txt
 ├── components
-    ├──L298N
-    ├──esp32-i2c-lcd1602
+    ├──L298N                Init and control functions for the L298N motor controller using PWM
+    ├──LM35                 Init and Task functions for the LM35 Temperature Sensor using ADC
+    ├──GR2048               Init and Task functions for the GR-2048 Flow Rate Sensor
+    ├──sys_resource         System resources for task management, queues, structs
+    ├──esp32-i2c-lcd1602    
     ├──esp32-smbus
       
 ├── main
