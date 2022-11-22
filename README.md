@@ -23,20 +23,37 @@ LCD1602 Liquid Crystal Display
 <img width="903" alt="image" src="https://user-images.githubusercontent.com/68623356/198076812-36c3dcf1-d0e3-4465-bee2-6a430304924f.png">
 
 
-## Using this Project
-* Download and Install the ESP-IDF toolchain: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/
-* After installing, open the ESP-IDF terminal application and navigate to /projects directory
-* Clone this repository using 
+### Using this Application
+This application is created in the esp-idf framework. The toolchain, compiler, drivers, all can be installed locally here: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/
+
+This application was developed on a Windows system, and the windows installer: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/windows-setup.html can be found here that automates the setup process. 
+Upon installation and following these steps, a ESP_IDF 4.x CMD utility will be installed, which is a development environment for esp-idf based projects. Open this. I used version 4.4, but a newer version may be available upon completion of this project.
+#### Configure ESP-IDF
 ```console
-git clone https://github.com/DmitriLyalikov/7x24-App.git
-cd 7x24-App
-idf.py configure
+install
+export.bat
+```
+#### Configure and build this project
+```console
+cd projects
+git clone https://github.com/DmitriLyalikov/ESP32_Smart_Clock.git
+cd ESP32_Smart_Clock
+idf.py fullclean
+idf.py set-target ESP32
 idf.py build
 ```
 
-* To flash and access serial output at runtime: 
+#### Flashing and Running
+With the ESP32 connected via USB, connected to 'COMx'
+```
+idf.py flash monitor 'COMx'
+```
+This will flash the application onto the system, and restart, it will then provide serial access to the application. This is not needed to use the clock, but is useful to ensure it flashed successfully. 
+
+#### Configure Application settings
+Some configurations may need to be made when using this application. Wifi SSID, Password, and authentication mode must be set before using this app, or the defaults will be used. Generally each component will have a configuration manager that is defined in components/component/Kconfig.Projbuild . Instead of editing hard-coded values in each component source file, a menuconfig utility is provided that can edit these values via command utility:
 ```console
-idf.py flash monitor {COMxxx}
+idf.py menuconfig
 ```
 
 ## ESP32 Default Pin Connections
