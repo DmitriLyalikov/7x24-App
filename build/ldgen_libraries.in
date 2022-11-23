@@ -73,6 +73,7 @@ $<TARGET_FILE:__idf_main>
 $<TARGET_FILE:__idf_sys_resource>
 $<TARGET_FILE:__idf_GR4028>
 $<TARGET_FILE:__idf_L298N>
-$<TARGET_FILE:__idf_LM35>
 $<TARGET_FILE:__idf_esp32-smbus>
 $<TARGET_FILE:__idf_esp32-i2c-lcd1602>
+$<TARGET_FILE:__idf_LCD1602>
+$<TARGET_FILE:__idf_LM35>

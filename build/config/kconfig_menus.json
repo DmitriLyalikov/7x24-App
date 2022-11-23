@@ -2052,50 +2052,6 @@
             {
                 "children": [],
                 "depends_on": null,
-                "help": "GPIO number (IOxx) for I2C SCL.\n\nSome GPIOs are used for other purposes (flash connections, etc.) and cannot be used.\n\nGPIOs 35-39 are input-only so cannot be used to drive the One Wire Bus.",
-                "id": "I2C_MASTER_SCL",
-                "name": "I2C_MASTER_SCL",
-                "range": [
-                    0,
-                    34
-                ],
-                "title": "I2C Master SCL GPIO number",
-                "type": "int"
-            },
-            {
-                "children": [],
-                "depends_on": null,
-                "help": "GPIO number (IOxx) for I2C SDA.\n\nSome GPIOs are used for other purposes (flash connections, etc.) and cannot be used.\n\nGPIOs 35-39 are input-only so cannot be used to drive the One Wire Bus.",
-                "id": "I2C_MASTER_SDA",
-                "name": "I2C_MASTER_SDA",
-                "range": [
-                    0,
-                    34
-                ],
-                "title": "I2C Master SDA GPIO number",
-                "type": "int"
-            },
-            {
-                "children": [],
-                "depends_on": null,
-                "help": "I2C address for HD44780-compatible LCD1602 device.",
-                "id": "LCD1602_I2C_ADDRESS",
-                "name": "LCD1602_I2C_ADDRESS",
-                "range": null,
-                "title": "I2C Address for LCD1602 device",
-                "type": "hex"
-            }
-        ],
-        "depends_on": null,
-        "id": "esp32-i2c-lcd1602-configuration",
-        "title": "esp32-i2c-lcd1602 Configuration",
-        "type": "menu"
-    },
-    {
-        "children": [
-            {
-                "children": [],
-                "depends_on": null,
                 "help": "See project READMe.MD for instructions on pin assignment",
                 "id": "FLOW_RATE_PIN",
                 "name": "FLOW_RATE_PIN",
@@ -2154,6 +2110,60 @@
         "depends_on": null,
         "id": "l298n-configuration",
         "title": "L298N Configuration",
+        "type": "menu"
+    },
+    {
+        "children": [
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "GPIO number (IOxx) for I2C SCL.\n\nSome GPIOs are used for other purposes (flash connections, etc.) and cannot be used.\n\nGPIOs 35-39 are input-only so cannot be used to drive the One Wire Bus.",
+                "id": "I2C_MASTER_SCL",
+                "name": "I2C_MASTER_SCL",
+                "range": [
+                    0,
+                    34
+                ],
+                "title": "I2C Master SCL GPIO number",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "GPIO number (IOxx) for I2C SDA.\n\nSome GPIOs are used for other purposes (flash connections, etc.) and cannot be used.\n\nGPIOs 35-39 are input-only so cannot be used to drive the One Wire Bus.",
+                "id": "I2C_MASTER_SDA",
+                "name": "I2C_MASTER_SDA",
+                "range": [
+                    0,
+                    34
+                ],
+                "title": "I2C Master SDA GPIO number",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "I2C address for HD44780-compatible LCD1602 device.",
+                "id": "LCD1602_I2C_ADDRESS",
+                "name": "LCD1602_I2C_ADDRESS",
+                "range": null,
+                "title": "I2C Address for LCD1602 device",
+                "type": "hex"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": null,
+                "id": "LCD1602_REFRESH_PERIOD",
+                "name": "LCD1602_REFRESH_PERIOD",
+                "range": null,
+                "title": "Display task refresh period",
+                "type": "int"
+            }
+        ],
+        "depends_on": null,
+        "id": "lcd1602-display-driver-config",
+        "title": "LCD1602 Display Driver Config",
         "type": "menu"
     },
     {

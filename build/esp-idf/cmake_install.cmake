@@ -125,9 +125,10 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/sys_resource/cmake_install.cmake")
   include("C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/GR4028/cmake_install.cmake")
   include("C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/L298N/cmake_install.cmake")
-  include("C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/LM35/cmake_install.cmake")
   include("C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/esp32-smbus/cmake_install.cmake")
   include("C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/esp32-i2c-lcd1602/cmake_install.cmake")
+  include("C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/LCD1602/cmake_install.cmake")
+  include("C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/LM35/cmake_install.cmake")
 
 endif()
 
