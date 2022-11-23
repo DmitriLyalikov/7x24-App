@@ -150,12 +150,25 @@ CONFIG_EAP_PASSWORD="Mchp4ung!!"
 # end of esp32-i2c-lcd1602 Configuration
 
 #
+# GR2048 Flow Rate Sensor Driver Config
+#
+CONFIG_FLOW_RATE_PIN=21
+# end of GR2048 Flow Rate Sensor Driver Config
+
+#
 # L298N Configuration
 #
 CONFIG_SERVO0_IN1_GPIO=32
 CONFIG_SERVO0_IN2_GPIO=33
 CONFIG_SERVO0_ENABLE_GPIO=25
 # end of L298N Configuration
+
+#
+# LM35 Temperature Sensor Driver Config
+#
+CONFIG_NO_OF_SAMPLES=10
+CONFIG_SAMPLE_PERIOD=12000
+# end of LM35 Temperature Sensor Driver Config
 
 #
 # Compiler options

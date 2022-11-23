@@ -52,6 +52,8 @@
 #include "esp_wpa2.h"
 #include "esp_netif.h"
 
+#include "GR2048.h"
+#include "LM35.h"
 #include "smbus.h"
 #include "i2c-lcd1602.h"
 
@@ -84,15 +86,7 @@ static volatile float old_error = 0;
 
 static float set_temp = 20;      // Desired Temperature of Target (Celsius)
 
-static esp_adc_cal_characteristics_t *adc_chars;
-static const adc_channel_t channel = ADC_CHANNEL_6;   // GPIO34 
-static const adc_bits_width_t width = ADC_WIDTH_12Bit;
-static const adc_atten_t atten = ADC_ATTEN_DB_11;
-static const adc_unit_t unit = ADC_UNIT_1;
-
 static SemaphoreHandle_t xQueueMutex;
-
-
 
 // Global resource queue handles 
 QueueHandle_t xSense_Queue, xFlow_Queue, xgpio_evt;
@@ -239,22 +233,20 @@ void app_main(void)
     nvs_flash_init();
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(ADC_init());
-    ESP_LOGI(TAG, "ADC Init OK");
     ESP_ERROR_CHECK(L298N_init());
-    ESP_LOGI(TAG, "L298N Motor Control Module Init OK");
 
     xQueueMutex = xSemaphoreCreateMutex();
     xSense_Queue = vQueueInit();
     xFlow_Queue = vQueueInit();
 
-    vInit_Flow();
-    xTaskCreatePinnedToCore(Temp_Sense,
+    // vInit_Flow();
+    /*xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",
                             1000,
                             NULL,
                             1, 
                             NULL,
-                            1);
+                            1); */
 
     xTaskCreatePinnedToCore(&vPIDCompute,
                             "PID_Compute",

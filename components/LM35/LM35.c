@@ -1,3 +1,14 @@
+
+#include "LM35.h"
+
+static const char* TAG = "Temperature {LM35}";
+
+static esp_adc_cal_characteristics_t *adc_chars;
+static const adc_channel_t channel = ADC_CHANNEL_6;   // GPIO34 
+static const adc_bits_width_t width = ADC_WIDTH_12Bit;
+static const adc_atten_t atten = ADC_ATTEN_DB_11;
+static const adc_unit_t unit = ADC_UNIT_1;
+
 /**
 *@brief
 *  Config ADC 
@@ -9,12 +20,13 @@ static esp_err_t ADC_init()
     adc1_config_channel_atten((adc1_channel_t)channel, atten);
     adc_chars = calloc(1, sizeof(esp_adc_cal_characteristics_t));
     esp_adc_cal_characterize(unit, atten, width, DEFAULT_VREF, adc_chars);
+    ESP_LOGI(TAG, "Initialized ADC");
     return ESP_OK;
 }   
 
 
 /**
-*@brief
+*@brief Temperature Sense Task
 *  Read Temperature from LM35 Over ADC 
 *  LM35 Transfer Function: Vout = 10mV/C *T
 *  Where T is temperature in Celsius
@@ -22,7 +34,7 @@ static esp_err_t ADC_init()
 *  Take (NO_OF_SAMPLES) of reads and use average
 *  Update xSense_Queue mailbox temp
 */
-static void Temp_Sense()
+static void vTemp_Sense(QueueHandle_t xSenseQueue, SemaphoreHandle_t xQueueMutex)
 {   
     for(;;){
     uint16_t temp, sum = 0;
@@ -32,12 +44,12 @@ static void Temp_Sense()
         sum  += temp * .1;
     }
     temp = (sum / NO_OF_SAMPLES);
-    ESP_LOGI(TAG, "Read: %d", temp);
+    ESP_LOGI(TAG, "Temperature Read Celsius: %d", temp);
     
     xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
     // Update xSense_Queue
-    vUpdateQueue(xSense_Queue, temp); 
+    vUpdateQueue(xSenseQueue, temp); 
     xSemaphoreGive(xQueueMutex);
-    vTaskDelay(pdMS_TO_TICKS(12000));
+    vTaskDelay(pdMS_TO_TICKS(SAMPLE_PERIOD));
     }
 }

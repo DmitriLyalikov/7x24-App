@@ -1,0 +1,13 @@
+menu "LM35 Temperature Sensor Driver Config"
+    config NO_OF_SAMPLES
+        int "Integer Number of temperature samples to take in a single period"
+        default 10
+        help
+            See project READMe.MD for instructions
+
+    config SAMPLE_PERIOD
+        int "Integer Number of milliseconds between writing to queue"
+        default 12000
+        help
+            See project READMe.MD for instructions
+endmenu

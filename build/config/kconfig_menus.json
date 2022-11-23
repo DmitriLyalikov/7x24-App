@@ -2196,6 +2196,24 @@
             {
                 "children": [],
                 "depends_on": null,
+                "help": "See project READMe.MD for instructions on pin assignment",
+                "id": "FLOW_RATE_PIN",
+                "name": "FLOW_RATE_PIN",
+                "range": null,
+                "title": "GPIO Pin assignment for GR2048 IRQ reading",
+                "type": "int"
+            }
+        ],
+        "depends_on": null,
+        "id": "gr2048-flow-rate-sensor-driver-config",
+        "title": "GR2048 Flow Rate Sensor Driver Config",
+        "type": "menu"
+    },
+    {
+        "children": [
+            {
+                "children": [],
+                "depends_on": null,
                 "help": "GPIO number (IOxx)",
                 "id": "SERVO0_IN1_GPIO",
                 "name": "SERVO0_IN1_GPIO",
@@ -2236,6 +2254,34 @@
         "depends_on": null,
         "id": "l298n-configuration",
         "title": "L298N Configuration",
+        "type": "menu"
+    },
+    {
+        "children": [
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions",
+                "id": "NO_OF_SAMPLES",
+                "name": "NO_OF_SAMPLES",
+                "range": null,
+                "title": "Integer Number of temperature samples to take in a single period",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions",
+                "id": "SAMPLE_PERIOD",
+                "name": "SAMPLE_PERIOD",
+                "range": null,
+                "title": "Integer Number of milliseconds between writing to queue",
+                "type": "int"
+            }
+        ],
+        "depends_on": null,
+        "id": "lm35-temperature-sensor-driver-config",
+        "title": "LM35 Temperature Sensor Driver Config",
         "type": "menu"
     },
     {
