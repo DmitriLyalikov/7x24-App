@@ -1,6 +1,8 @@
 #ifndef SYS_RESOURCE_H
 #define SYS_RESOURCE_H
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 #include "freertos/queue.h"
 
 /**
@@ -20,7 +22,7 @@ typedef struct xSense_t
 QueueHandle_t vQueueInit(void);
 
 
-void vUpdateQueue(QueueHandle_t Queue, float ulNewValue);
+void vUpdateQueue(QueueHandle_t Queue, uint16_t ulNewValue);
 
 /**
  * @brief 

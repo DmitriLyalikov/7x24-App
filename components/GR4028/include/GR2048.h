@@ -6,7 +6,6 @@
 #include "sys_resource.h"
 #include "driver/gpio.h"
 #include "driver/adc.h"
-#include "esp_adc_cal.h"
 
 #define FLOW_RATE_PIN  CONFIG_FLOW_RATE_PIN
 /**

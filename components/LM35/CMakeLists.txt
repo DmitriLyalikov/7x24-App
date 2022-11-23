@@ -1,3 +1,3 @@
 idf_component_register(SRCS "LM35.c"
                        INCLUDE_DIRS "include"
-                       REQUIRES "sys_resource")
+                       REQUIRES "sys_resource" "esp_adc_cal")

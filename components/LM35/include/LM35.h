@@ -1,6 +1,8 @@
 #ifndef LM35_H
 #define LM35_H
 
+#include "freertos/FreeRTOS.h"
+#include "esp_log.h"
 #include "driver/adc.h"
 #include "freertos/semphr.h"
 #include "sys_resource.h"

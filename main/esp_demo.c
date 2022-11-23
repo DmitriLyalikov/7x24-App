@@ -52,8 +52,7 @@
 #include "esp_wpa2.h"
 #include "esp_netif.h"
 
-#include "GR2048.h"
-#include "LM35.h"
+#include "sys_resource.h"
 #include "smbus.h"
 #include "i2c-lcd1602.h"
 
@@ -232,7 +231,7 @@ void app_main(void)
 
     nvs_flash_init();
     ESP_ERROR_CHECK(nvs_flash_init());
-    ESP_ERROR_CHECK(ADC_init());
+    // ESP_ERROR_CHECK(ADC_init());
     ESP_ERROR_CHECK(L298N_init());
 
     xQueueMutex = xSemaphoreCreateMutex();
