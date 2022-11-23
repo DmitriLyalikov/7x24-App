@@ -1,0 +1,7 @@
+menu "GR2048 Flow Rate Sensor Driver Config"
+    config FLOW_RATE_PIN
+        int "GPIO Pin assignment for GR2048 IRQ reading"
+        default 21
+        help
+            See project READMe.MD for instructions on pin assignment
+endmenu

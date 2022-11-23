@@ -39,9 +39,10 @@
 #include "driver/gpio.h"
 #include "driver/i2c.h"
 #include "nvs_flash.h"
-#include "L298N.h"
+
 
 #include "sys_resource.h"
+#include "GR2048.h"
 #include "LCD1602.h"
 #include "L298N.h"
 
@@ -159,7 +160,7 @@ void app_main(void)
     xSense_Queue = vQueueInit();
     xFlow_Queue = vQueueInit();
 
-    // vInit_Flow();
+    vInit_Flow();
     /*xTaskCreatePinnedToCore(Temp_Sense,
                             "TEMP_SENSE",
                             1000,
