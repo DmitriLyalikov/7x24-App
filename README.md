@@ -87,6 +87,21 @@ Some configurations may need to be made when using this application. Wifi SSID, 
 idf.py menuconfig
 ```
 
+<img width="640" alt="image" src="https://user-images.githubusercontent.com/68623356/203680072-d12c500b-6641-4c9f-9866-dffc7e808b5a.png">
+
+After exiting and saving this graphical config utility. Make sure to build and reflash the utility again for changes to take effect: 
+```console
+idf.py reconfigure
+idf.py build 
+idf.py flash monitor 'COMx'
+```
+#### Tuning PID Constants
+
+Part of an important test for this system is to configure properly the PID constants with different temperature set points mentioned before. This must be done iteratively while running the system. In the menuconfig utility discussed above, these parameters can be viewed without inspecting the source code and changed quickly. Using this with the logging python automation. A very quick tuning automation system can be made that can tweak each component, gather data, visualize the PID output, and repeat, until the optimal values are found. 
+
+<img width="640" alt="image" src="https://user-images.githubusercontent.com/68623356/203680707-4e6135f3-5640-4b4d-9cd8-26bd1d7d6674.png">
+
+
 ### ESP32 Default Pin Connections
 The default pin connections can be found and reconfigured or using. This should not need to be done unless porting this application to another system
 
