@@ -725,3 +725,10 @@ C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/LM35/CMa
 C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/LM35/CMakeFiles/install.dir
 C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/LM35/CMakeFiles/install/local.dir
 C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/LM35/CMakeFiles/install/strip.dir
+C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/pid_controller/CMakeFiles/__idf_pid_controller.dir
+C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/pid_controller/CMakeFiles/edit_cache.dir
+C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/pid_controller/CMakeFiles/rebuild_cache.dir
+C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/pid_controller/CMakeFiles/list_install_components.dir
+C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/pid_controller/CMakeFiles/install.dir
+C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/pid_controller/CMakeFiles/install/local.dir
+C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/build/esp-idf/pid_controller/CMakeFiles/install/strip.dir

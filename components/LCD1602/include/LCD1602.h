@@ -33,7 +33,7 @@
 #define I2C_MASTER_SCL_IO        CONFIG_I2C_MASTER_SCL
 #define LCD1602_REFRESH_PERIOD   CONFIG_LCD1602_REFRESH_PERIOD
 
-void vDisplay_Task_Init(QueueHandle_t xTemp_Queue, QueueHandle_t xFlow_Queue, SemaphoreHandle_t xQueueMutex);
+void vInit_Display_Task(QueueHandle_t xTemp_Queue, QueueHandle_t xFlow_Queue, SemaphoreHandle_t xQueueMutex);
 void vDisplay_Task(void *pvParameters);
 
 #endif

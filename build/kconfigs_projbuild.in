@@ -7,4 +7,5 @@ source "C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/components/GR2
 source "C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/components/L298N/Kconfig.projBuild"
 source "C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/components/LCD1602/Kconfig.projbuild"
 source "C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/components/LM35/Kconfig.projbuild"
+source "C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/components/pid_controller/Kconfig.projBuild"
 source "C:/Users/Dmitr/OneDrive/Desktop/esp-idf/projects/7x24-App/components/sys_resource/Kconfig.projbuild"

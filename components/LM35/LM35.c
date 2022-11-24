@@ -9,19 +9,28 @@ static const adc_bits_width_t width = ADC_WIDTH_12Bit;
 static const adc_atten_t atten = ADC_ATTEN_DB_11;
 static const adc_unit_t unit = ADC_UNIT_1;
 
+static QueueHandle_t xSenseQueue;
+static SemaphoreHandle_t xQueueMutex;
+
 /**
 *@brief
 *  Config ADC 
 *  Channel 6 Unit 1 
 *  (12 Bit Resolution, 0 Attenuation, 1V2 Reference)
 */
-static esp_err_t ADC_init()
+void vInit_TempSense_Task(QueueHandle_t xSenseQueue, SemaphoreHandle_t xQueueMutex)
 {
     adc1_config_channel_atten((adc1_channel_t)channel, atten);
     adc_chars = calloc(1, sizeof(esp_adc_cal_characteristics_t));
     esp_adc_cal_characterize(unit, atten, width, DEFAULT_VREF, adc_chars);
-    ESP_LOGI(TAG, "Initialized ADC");
-    return ESP_OK;
+    ESP_LOGI(TAG, "Starting ADC/Temp Sense Task");
+    xTaskCreatePinnedToCore(vTempSense_Task,
+                            "TEMP_SENSE",
+                            1000,
+                            NULL,
+                            1, 
+                            NULL,
+                            1);
 }   
 
 
@@ -34,7 +43,7 @@ static esp_err_t ADC_init()
 *  Take (NO_OF_SAMPLES) of reads and use average
 *  Update xSense_Queue mailbox temp
 */
-static void vTemp_Sense(QueueHandle_t xSenseQueue, SemaphoreHandle_t xQueueMutex)
+void vTempSense_Task(void *pvParameters)
 {   
     for(;;){
     uint16_t temp, sum = 0;

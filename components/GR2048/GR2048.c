@@ -3,6 +3,9 @@
 static const char* TAG = "Flow Sensor {GR-2048}";
 static volatile uint16_t flow_samples;
 
+static QueueHandle_t xFlow_Queue;
+static SemaphoreHandle_t xQueueMutex;
+
 void IRAM_ATTR vFlow_ISR_Handler(void* arg)
 {
     flow_samples++;
@@ -13,9 +16,8 @@ void IRAM_ATTR vFlow_ISR_Handler(void* arg)
  *        Writes to xFlow_Queue every 60 seconds
  * Flow_Rate = (Pulse Frequency) / 38 (Flow Rate in liters per minute)
  */
-void vFlow_Rate_Task(QueueHandle_t xQueue)
+void vFlowRate_Task(void *pvParameters)
 {
-    QueueHandle_t xFlow_Queue = xQueue;
     uint32_t flow_rate = 0;
     for (;;){
     flow_rate = ((flow_samples / 38) / 10 );
@@ -32,7 +34,7 @@ void vFlow_Rate_Task(QueueHandle_t xQueue)
  *        flow_samples
  *        stack size 2000
  */
-void vInit_Flow(void)
+void vInit_FlowRate_Task(QueueHandle_t xFlow_Queue, SemaphoreHandle_t xQueueMutex)
 {
     gpio_config_t gpioConfig;
     gpioConfig.pin_bit_mask = FLOW_RATE_PIN;
@@ -45,4 +47,13 @@ void vInit_Flow(void)
     gpio_install_isr_service(0);
     gpio_isr_handler_add(FLOW_RATE_PIN, vFlow_ISR_Handler, (void*) FLOW_RATE_PIN);
     ESP_LOGI(TAG, "Registered ISR to Flow Rate Pin: %d", FLOW_RATE_PIN);
+    ESP_LOGI(TAG, "Starting Flow Rate Task");
+    xTaskCreatePinnedToCore(vFlowRate_Task,
+                            "FLOW_SENSE",
+                            1000,
+                            NULL,
+                            1, 
+                            NULL,
+                            1);
+
 }

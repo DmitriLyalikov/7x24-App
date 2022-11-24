@@ -1,0 +1,49 @@
+menu "PID Control Algorithm Configuration"
+    config SET_TEMP
+        int "Temperature Set point (Desired Value) in Celsius"
+        default 30
+        help
+            See project READMe.MD for instructions
+
+    config PID_CONTROL_PERIOD
+        int "Period in Milliseconds for vPIDCompute task to compute a new value"
+        default 12000
+        help
+            See project READMe.MD for instructions
+
+    config PID_MIN_INTEGRAL
+        int "PID Algorithm Minimum Integral Value"
+        default 2
+        help
+            See project READMe.MD for instructions on setting PID tuning values
+
+    config PID_MAX_INTEGRAL
+        int "PID Algorithm Maximum Integral Value"
+        default 10
+        help
+            See project READMe.MD for instructions on setting PID tuning values   
+
+    config PID_EPSILON
+        int "PID Algorithm Epsilon Value"
+        default 1
+        help
+            See project READMe.MD for instructions on setting PID tuning values
+
+    config PID_KP
+        int "PID Algorithm Proportional Constant"
+        default 2
+        help
+            See project READMe.MD for instructions on setting PID tuning values
+
+    config PID_KI
+        int "PID Algorithm Integral Constant"
+        default 5
+        help
+            See project READMe.MD for instructions on setting PID tuning values
+
+    config PID_KD
+        int "PID Algorithm Derivative Constant"
+        default 1
+        help
+            See project READMe.MD for instructions on setting PID tuning values
+endmenu

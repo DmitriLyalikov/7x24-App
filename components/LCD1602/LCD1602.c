@@ -16,7 +16,7 @@ static QueueHandle_t xTemp_Queue;
 static QueueHandle_t xFlow_Queue;
 static SemaphoreHandle_t xQueueMutex;
 
-void vDisplay_Task_Init(QueueHandle_t xTemp_Queue, QueueHandle_t xFlow_Queue, SemaphoreHandle_t xQueueMutex){
+void vInit_Display_Task(QueueHandle_t xTemp_Queue, QueueHandle_t xFlow_Queue, SemaphoreHandle_t xQueueMutex){
     ESP_LOGI( TAG, "Starting LCD Display Task");
     xTaskCreatePinnedToCore(&vDisplay_Task,
                         "LCD_Display",

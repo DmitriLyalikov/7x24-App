@@ -2197,6 +2197,94 @@
     {
         "children": [
             {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions",
+                "id": "SET_TEMP",
+                "name": "SET_TEMP",
+                "range": null,
+                "title": "Temperature Set point (Desired Value) in Celsius",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions",
+                "id": "PID_CONTROL_PERIOD",
+                "name": "PID_CONTROL_PERIOD",
+                "range": null,
+                "title": "Period in Milliseconds for vPIDCompute task to compute a new value",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions on setting PID tuning values",
+                "id": "PID_MIN_INTEGRAL",
+                "name": "PID_MIN_INTEGRAL",
+                "range": null,
+                "title": "PID Algorithm Minimum Integral Value",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions on setting PID tuning values",
+                "id": "PID_MAX_INTEGRAL",
+                "name": "PID_MAX_INTEGRAL",
+                "range": null,
+                "title": "PID Algorithm Maximum Integral Value",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions on setting PID tuning values",
+                "id": "PID_EPSILON",
+                "name": "PID_EPSILON",
+                "range": null,
+                "title": "PID Algorithm Epsilon Value",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions on setting PID tuning values",
+                "id": "PID_KP",
+                "name": "PID_KP",
+                "range": null,
+                "title": "PID Algorithm Proportional Constant",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions on setting PID tuning values",
+                "id": "PID_KI",
+                "name": "PID_KI",
+                "range": null,
+                "title": "PID Algorithm Integral Constant",
+                "type": "int"
+            },
+            {
+                "children": [],
+                "depends_on": null,
+                "help": "See project READMe.MD for instructions on setting PID tuning values",
+                "id": "PID_KD",
+                "name": "PID_KD",
+                "range": null,
+                "title": "PID Algorithm Derivative Constant",
+                "type": "int"
+            }
+        ],
+        "depends_on": null,
+        "id": "pid-control-algorithm-configuration",
+        "title": "PID Control Algorithm Configuration",
+        "type": "menu"
+    },
+    {
+        "children": [
+            {
                 "children": [
                     {
                         "children": [],
