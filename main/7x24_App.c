@@ -1,16 +1,12 @@
 /**
- * @file    esp_demo.c
+ * @file    7x24_App.c
  * @author  Dmitri Lyalikov
  * @brief   7x24 Application Source for ESP32 
- * @version 1.1
- * @date    2022-10-26
+ * @version 2.1
+ * @date    2022-11-23
  * @copyright Copyright (c) 2022
  * 
  * Entry Point and Application, App_Main():
- *     Configures Hardware, ADC, L298N modules via init() functions
- *     Creates Resource sharing mechanisms (xSenseQueue, xFlowQueue) and Mutex
- *     Assign tasks to Cores, Networking performed on Core 0, 
- *     Hardware interfacing and Control tasks on Core 1
  * 
  *     ESP32 PIN TOPOLOGY
  *     -GPIO34 <-> LM35 Vout
@@ -40,7 +36,6 @@
 #include "driver/i2c.h"
 #include "nvs_flash.h"
 
-
 #include "sys_resource.h"
 #include "GR2048.h"
 #include "LCD1602.h"
@@ -53,7 +48,6 @@ static const char* TAG = "7x24 APP";
 // Global resource queue handles 
 static SemaphoreHandle_t xQueueMutex;
 QueueHandle_t xSense_Queue, xFlow_Queue;
-
 
 /**
  * @brief Initialize I2C Master bus for LCD1602 Display
