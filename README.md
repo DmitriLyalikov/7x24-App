@@ -20,7 +20,7 @@ $$ D = dT/dt $$
 
 $$ D = \int\limits_0^t T dt $$
 
-These components are then summed together and give the response of the system, in the form of a percentage from 0 - 100 % flow rate. The flow rate is controlled via a PWM output to the pump's power source. 
+These components are then summed together and give the response of the system, in the form of a percentage from 0 - 100 % flow rate. This response output is a PWM signal to the EN pin of the DC motor controller (L298N). This has the effect of controlling the speed of the pump flow rate.
 
 Each of these components are tuned on physical system with tuning parameters. These change the responsiveness of each of the components, so that the set temperature of the processor is reached using a minimal amount of pump time.
  
