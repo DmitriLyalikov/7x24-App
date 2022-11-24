@@ -150,7 +150,7 @@ All components that are hardware facing (drivers for a specfic device) are named
 ├── main
 │   ├── CMakeLists.txt
 │   ├── component.mk    
-│   └── esp-demo.c         Entry point to application
+│   └── 7x24-App.c         Entry point to application
 ├── Makefile                   Makefile used by legacy GNU Make
 └── README.md                  This is the file you are currently reading
 ```
