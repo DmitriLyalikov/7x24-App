@@ -12,7 +12,7 @@ Using a PID algorithm, will use three feedback components:
 $$ P = current - set  $$
 * Derivative Component, numerically approximated current rate of change of temperature
 
-$ D = dT/dt $
+$$ D = dT/dt $$
 
 * Integral Component, the sum of previous temperature deviations
 $$ D = \int\limits_0^t T dt $$
