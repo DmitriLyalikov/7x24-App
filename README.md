@@ -126,7 +126,8 @@ The default pin connections can be found and reconfigured or using. This should 
 *     -GPIO18 <-> LCD1602 SDA
 
 ## Projects contents
-
+If you need to look through the source code to understand more deeply, this is the an explanation of how this application is setup.
+Also, if you notice an issue, misbehavior, mistake, or have a comment, thought, or advice, please open an issue in this github project with a description to the best you can. 
 The project **7x24-App** contains one source file in C language [esp_demo.c](main/esp_demo.c). The file is located in folder [main](main).
 
 ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt` files that provide set of directives and instructions describing the project's source files and targets (executable, library, or both). 
@@ -153,3 +154,9 @@ All components that are hardware facing (drivers for a specfic device) are named
 ├── Makefile                   Makefile used by legacy GNU Make
 └── README.md                  This is the file you are currently reading
 ```
+## Finding and Reporting Issues
+If you notice an issue, misbehavior, mistake, or have a comment, thought, or advice, please open an issue in this github project in the Issues Tab with a description to the best you can. This is the best way to have this resolved. 
+Please add as much information as you can with at least one of the following:
+* A description of the issue and the state of the system when it happened
+* steps to recreate the same issue
+* Desired or expected outcome
