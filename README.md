@@ -22,7 +22,7 @@ $$ D = \int\limits_0^t T dt $$
 
 These components are then summed together and give the response of the system, in the form of a percentage from 0 - 100 % flow rate. This response output is a PWM signal to the EN pin of the DC motor controller (L298N). This has the effect of controlling the speed of the pump flow rate.
 
-Each of these components are tuned on physical system with tuning parameters. These change the responsiveness of each of the components, so that the set temperature of the processor is reached using a minimal amount of pump time.
+Each of these components are tuned on physical system with tuning parameters. These change the responsiveness of each of the components, so that the set temperature of the processor is reached using a minimal amount of pump time. For detailed introduction to tuning the PID parameters, use this resource: https://pidexplained.com/how-to-tune-a-pid-controller/
  
 The project presentation can be found at: https://www.youtube.com/watch?v=ilWbGFTbL-w
 
@@ -74,8 +74,20 @@ In order to extract long term data for visualization, there are some python scri
 In order to use these scripts. Follow the procedure of flashing and running on and verify that logging is visible to the host machine. While the device is still connected, open a separate terminal utility in the pylog subdirectory, and use the command:
 
 ```console
-python3 logger.py 
+python3 logger.py {COMx} {Outputfile_name} {testDuration}
 ```
+These arguments are desribed as follows:
+
+* COMx: The COM device using between host and ESP32 device
+* Outputfile_Name: The name of the resulting data file generated, it will be saved in /pylog
+* testDuration: Time in minutes to proceed with system monitoring and logging
+
+An example usage would be (starting in project directory as before):
+```console
+cd pylog
+python3 logger.py COM10 Dmitri_SimpleTest_Run 1
+```
+This will open a monitoring instance on COM device 10 for 1 minute and output data to a .csv file named Dmitri_SimpleTest_Run.csv. 
 
 This will extract temperature and flow rate data at discrete time points from the system during runtime and generate a csv spreadsheet time markers. It will also build some useful plots for data visualization. The default .csv file will be saved in the same /pylog subdirectory.
 
@@ -114,7 +126,8 @@ The default pin connections can be found and reconfigured or using. This should 
 *     -GPIO18 <-> LCD1602 SDA
 
 ## Projects contents
-
+If you need to look through the source code to understand more deeply, this is the an explanation of how this application is setup.
+Also, if you notice an issue, misbehavior, mistake, or have a comment, thought, or advice, please open an issue in this github project with a description to the best you can. 
 The project **7x24-App** contains one source file in C language [esp_demo.c](main/esp_demo.c). The file is located in folder [main](main).
 
 ESP-IDF projects are built using CMake. The project build configuration is contained in `CMakeLists.txt` files that provide set of directives and instructions describing the project's source files and targets (executable, library, or both). 
@@ -137,7 +150,13 @@ All components that are hardware facing (drivers for a specfic device) are named
 ├── main
 │   ├── CMakeLists.txt
 │   ├── component.mk    
-│   └── esp-demo.c         Entry point to application
+│   └── 7x24-App.c         Entry point to application
 ├── Makefile                   Makefile used by legacy GNU Make
 └── README.md                  This is the file you are currently reading
 ```
+## Finding and Reporting Issues
+If you notice an issue, misbehavior, mistake, or have a comment, thought, or advice, please open an issue in this github project in the Issues Tab with a description to the best you can. This is the best way to have this resolved. 
+Please add as much information as you can with at least one of the following:
+* A description of the issue and the state of the system when it happened
+* steps to recreate the same issue
+* Desired or expected outcome
