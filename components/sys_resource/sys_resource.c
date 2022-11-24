@@ -7,11 +7,12 @@ QueueHandle_t vQueueInit(void)
     return xQueueCreate(1, sizeof(xSense_t));
 }
 
-void vUpdateQueue(QueueHandle_t Queue, uint16_t ulNewValue)
+void vUpdateQueue(QueueHandle_t Queue, const char* task_tag, uint16_t ulNewValue)
 {
     xSense_t xData;
     xData.ulValue = ulNewValue;
     xData.xTimeStamp = pdTICKS_TO_MS(xTaskGetTickCount());
+    ESP_LOGI(task_tag, "%d: %d", xData.xTimeStamp, xData.ulValue);
     xQueueOverwrite(Queue, &xData);
 }
 

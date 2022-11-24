@@ -5,6 +5,8 @@ the idf.py monitor utility and output this data and some basic statistics to a .
 '''
 
 import sys
+import re
+import shutil
 import subprocess
 import time
 import pandas as pd
@@ -17,21 +19,32 @@ class logger:
         self.test_exit_cmd = "^]"
         self.output_file = output_file
         self.path = os.getcwd()
+        self.log_file = "monitor_log.txt"
 
         # Convert seconds to milliseconds
         self.duration = test_duration * 60 
         self.test_data = {'time': [], 'temp': [], 'flow': []}
-        self.start()
+        self.start_test()
 
+    # Start monitoring 
     def start_monitor(self):
         os.chdir("..")
-        # Sta
-        subprocess.check_output(['python3', self.test_invoke_cmd])
-        time.sleep()
-
-    def run_test(self):
+        # Start monitoring ESP-device and save output to temp file
+        monitor = subprocess.Popen(['python3', self.test_invoke_cmd], stdout=self.log_file, shell=True)
+        monitor.communicate()
+        time.sleep(self.duration)
+        monitor.terminate()
+        # move everything back into working directory
+        shutil.move(os.path.join(os.getcwd(), self.log_file), self.path)
+        os.chdir(self.path)
 
     def parse_monitor(self):
+        log_file = open(self.log_file, "r")
+        for line in log_file:
+            if TEMP_TAG in line:
+        
+            elif FLOW_TAG in line:
+                
 
     def build_output(self):
 

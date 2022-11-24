@@ -21,7 +21,7 @@ void vFlowRate_Task(void *pvParameters)
     uint32_t flow_rate = 0;
     for (;;){
     flow_rate = ((flow_samples / 38) / 10 );
-    vUpdateQueue(xFlow_Queue, flow_rate);
+    vUpdateQueue(xFlow_Queue, TAG, flow_rate);
     ESP_LOGI(TAG, "Flow Rate = %d L/m\n", flow_rate);
     flow_samples = 0;
     vTaskDelay(pdMS_TO_TICKS(60000));
