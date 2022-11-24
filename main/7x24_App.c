@@ -19,15 +19,9 @@
  *     -GPIO21 <-> G 1/4 Flow Sensor
  */
 #include <stdio.h>
-#include <sys/param.h>
-#include <stdbool.h>
-#include <string.h>
 
-#include "esp_system.h"
-#include "esp_spi_flash.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "freertos/timers.h"
 #include "esp_log.h"
 #include "esp_err.h"
 #include "sdkconfig.h"
@@ -51,8 +45,6 @@ QueueHandle_t xSense_Queue, xFlow_Queue;
 
 /**
  * @brief Initialize I2C Master bus for LCD1602 Display
- *        SCL - GPIO19
- *        SDA - GPIO18
  */
 static void i2c_master_init(void)
 {
