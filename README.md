@@ -85,7 +85,7 @@ idf.py menuconfig
 ### ESP32 Default Pin Connections
 The default pin connections can be found and reconfigured or using. This should not need to be done unless porting this application to another system
 
-*   -GPIO34 <-> LM35 Vout 
+*     -GPIO34 <-> LM35 Vout 
 *     -GPIO32 <-> L298N IN1_0
 *     -GPIO33 <-> L298N IN2_0
 *     -GPIO25 <-> L298N EN1_0
