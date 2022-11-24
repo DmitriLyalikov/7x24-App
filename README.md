@@ -17,6 +17,7 @@ $$ P = current - set  $$
 $$ D = dT/dt $$
 
 * Integral Component, the sum of previous temperature deviations
+
 $$ D = \int\limits_0^t T dt $$
 
 These components are then summed together and give the response of the system, in the form of a percentage from 0 - 100 % flow rate. The flow rate is controlled via a PWM output to the pump's power source. 
