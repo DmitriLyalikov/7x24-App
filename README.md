@@ -22,7 +22,7 @@ $$ D = \int\limits_0^t T dt $$
 
 These components are then summed together and give the response of the system, in the form of a percentage from 0 - 100 % flow rate. This response output is a PWM signal to the EN pin of the DC motor controller (L298N). This has the effect of controlling the speed of the pump flow rate.
 
-Each of these components are tuned on physical system with tuning parameters. These change the responsiveness of each of the components, so that the set temperature of the processor is reached using a minimal amount of pump time.
+Each of these components are tuned on physical system with tuning parameters. These change the responsiveness of each of the components, so that the set temperature of the processor is reached using a minimal amount of pump time. For detailed introduction to tuning the PID parameters, use this resource: https://pidexplained.com/how-to-tune-a-pid-controller/
  
 The project presentation can be found at: https://www.youtube.com/watch?v=ilWbGFTbL-w
 
