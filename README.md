@@ -74,8 +74,20 @@ In order to extract long term data for visualization, there are some python scri
 In order to use these scripts. Follow the procedure of flashing and running on and verify that logging is visible to the host machine. While the device is still connected, open a separate terminal utility in the pylog subdirectory, and use the command:
 
 ```console
-python3 logger.py 
+python3 logger.py {COMx} {Outputfile_name} {testDuration}
 ```
+These arguments are desribed as follows:
+
+* COMx: The COM device using between host and ESP32 device
+* Outputfile_Name: The name of the resulting data file generated, it will be saved in /pylog
+* testDuration: Time in minutes to proceed with system monitoring and logging
+
+An example usage would be (starting in project directory as before):
+```console
+cd pylog
+python3 logger.py COM10 Dmitri_SimpleTest_Run 1
+```
+This will open a monitoring instance on COM device 10 for 1 minute and output data to a .csv file named Dmitri_SimpleTest_Run.csv. 
 
 This will extract temperature and flow rate data at discrete time points from the system during runtime and generate a csv spreadsheet time markers. It will also build some useful plots for data visualization. The default .csv file will be saved in the same /pylog subdirectory.
 
