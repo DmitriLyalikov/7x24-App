@@ -53,7 +53,7 @@ void vTempSense_Task(void *pvParameters)
         sum  += temp * .1;
     }
     temp = (sum / NO_OF_SAMPLES);
-    // ESP_LOGI(TAG, "Temperature Read Celsius: %d", temp);
+    ESP_LOGI(TAG, "Temperature Read Celsius: %d", temp);
     
     xSemaphoreTake(xQueueMutex, pdMS_TO_TICKS(1000));
     // Update xSense_Queue
