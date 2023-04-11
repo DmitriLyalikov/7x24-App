@@ -9,6 +9,10 @@ static const adc_bits_width_t width = ADC_WIDTH_12Bit;
 static const adc_atten_t atten = ADC_ATTEN_DB_11;
 static const adc_unit_t unit = ADC_UNIT_1;
 
+static const adc_channel_t ts1_channel = ADC_CHANNEL_4; // GPIO 32
+static const adc_channel_t ts2_channel = ADC_CHANNEL_5; // GPIO 33
+
+
 static QueueHandle_t xSenseQueue;
 static SemaphoreHandle_t xQueueMutex;
 
